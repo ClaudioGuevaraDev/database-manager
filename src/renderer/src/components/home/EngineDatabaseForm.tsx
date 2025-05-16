@@ -1,0 +1,218 @@
+import {
+  Button,
+  Divider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Select,
+  Selection,
+  SelectItem,
+  Switch
+} from '@heroui/react'
+import { Connection, Engine, engines } from '@renderer/interfaces/connection'
+import MySQLSvg from '@renderer/svgs/MySQLSvg'
+import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
+import { FormEvent, JSX, ReactNode, useState } from 'react'
+import { BsDatabaseCheck } from 'react-icons/bs'
+import { BsEyeFill } from 'react-icons/bs'
+import { FaSave } from 'react-icons/fa'
+import { HiMiniEyeSlash } from 'react-icons/hi2'
+import { IoExitOutline } from 'react-icons/io5'
+
+interface ConnectionForm {
+  name: string
+  engine: Selection
+  host: string
+  port: string
+  username: string
+  password: string
+  database: string
+  ssl: boolean
+}
+
+const initialConnectionForm: ConnectionForm = {
+  name: '',
+  engine: new Set([engines[0]]),
+  database: '',
+  host: '',
+  password: '',
+  port: '',
+  ssl: false,
+  username: ''
+}
+
+type FormAction = 'save' | 'test'
+
+interface Props {
+  isOpen: boolean
+  onOpenChange: (value: boolean) => void
+  onClose: () => void
+  connections: Connection[]
+  setConnections: (value: Connection[]) => void
+}
+
+function EngineDatabaseForm({
+  isOpen,
+  onOpenChange,
+  onClose,
+  connections,
+  setConnections
+}: Props): JSX.Element {
+  const [form, setForm] = useState<ConnectionForm>(initialConnectionForm)
+  const [action, setAction] = useState<FormAction | undefined>(undefined)
+  const [showPort, setShowPort] = useState(false)
+
+  const renderEngineSvg = (engine: Engine): ReactNode => {
+    switch (engine) {
+      case 'PostgreSQL':
+        return <PostgreSQLSvg width={24} height={24} />
+      case 'MySQL':
+        return <MySQLSvg width={24} height={24} />
+      default:
+        return null
+    }
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault()
+
+    if (action === 'save') {
+      let connections = localStorage.getItem('connections')
+
+      if (connections == null) {
+        localStorage.setItem('connections', JSON.stringify([]))
+        connections = '[]'
+      }
+
+      const connectionsParsed = JSON.parse(connections) as Connection[]
+
+      const newConnections: Connection[] = [
+        {
+          ...form,
+          engine: Array.from(form.engine)[0] as Engine
+        },
+        ...connectionsParsed
+      ]
+
+      localStorage.setItem('connections', JSON.stringify(newConnections))
+
+      setConnections(newConnections)
+      setForm(initialConnectionForm)
+      onClose()
+    }
+  }
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      size="xl"
+      hideCloseButton={connections.length === 0}
+      isDismissable={connections.length !== 0}
+      isKeyboardDismissDisabled={connections.length === 0}
+    >
+      <ModalContent>
+        <form onSubmit={handleSubmit}>
+          <ModalHeader className="text-xl">Crear nueva conexión</ModalHeader>
+          <Divider className="mb-2" />
+          <ModalBody>
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label="Nombre de la conexión"
+                isRequired
+                value={form.name}
+                onValueChange={(value) => setForm({ ...form, name: value })}
+              />
+              <Select
+                label="Motor de base de datos"
+                selectedKeys={form.engine}
+                onSelectionChange={(value) => setForm({ ...form, engine: value })}
+                startContent={renderEngineSvg(Array.from(form.engine)[0] as Engine)}
+              >
+                {engines.map((engine) => (
+                  <SelectItem key={engine} startContent={renderEngineSvg(engine)}>
+                    {engine}
+                  </SelectItem>
+                ))}
+              </Select>
+              <Input
+                label="Host"
+                placeholder="127.0.0.1"
+                isRequired
+                value={form.host}
+                onValueChange={(value) => setForm({ ...form, host: value })}
+              />
+              <Input
+                label="Puerto"
+                isRequired
+                value={form.port}
+                onValueChange={(value) => setForm({ ...form, port: value })}
+              />
+              <Input
+                label="Usuario"
+                isRequired
+                value={form.username}
+                onValueChange={(value) => setForm({ ...form, username: value })}
+              />
+              <Input
+                label="Contraseña"
+                type={showPort ? 'text' : 'password'}
+                isRequired
+                value={form.password}
+                onValueChange={(value) => setForm({ ...form, password: value })}
+                endContent={
+                  showPort ? (
+                    <HiMiniEyeSlash
+                      className="w-6 h-6 cursor-default"
+                      onClick={() => setShowPort(false)}
+                    />
+                  ) : (
+                    <BsEyeFill
+                      className="w-6 h-6 cursor-default"
+                      onClick={() => setShowPort(true)}
+                    />
+                  )
+                }
+              />
+              <Input
+                label="Base de datos"
+                value={form.database}
+                onValueChange={(value) => setForm({ ...form, database: value })}
+              />
+            </div>
+
+            <Switch size="sm">SSL</Switch>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              type="submit"
+              startContent={<FaSave className="w-5 h-5" />}
+              onPress={() => setAction('save')}
+            >
+              Guardar
+            </Button>
+            <Button
+              color="success"
+              type="submit"
+              startContent={<BsDatabaseCheck className="w-5 h-5" />}
+              onPress={() => setAction('test')}
+            >
+              Probar
+            </Button>
+            {connections.length > 0 && (
+              <Button onPress={onClose} startContent={<IoExitOutline className="w-5 h-5" />}>
+                Cerrar
+              </Button>
+            )}
+          </ModalFooter>
+        </form>
+      </ModalContent>
+    </Modal>
+  )
+}
+
+export default EngineDatabaseForm
