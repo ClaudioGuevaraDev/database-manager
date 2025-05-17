@@ -18,6 +18,7 @@ import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
 import { JSX } from 'react'
 import { IoExitOutline } from 'react-icons/io5'
 import { TbDatabaseEdit, TbDatabaseImport, TbDatabaseX } from 'react-icons/tb'
+import { toast } from 'sonner'
 
 import EngineDatabaseForm from './EngineDatabaseForm'
 
@@ -49,13 +50,18 @@ function ConnectionCard({ connection }: Props): JSX.Element {
       return
     }
 
-    const connectionsParsed = JSON.parse(connections) as Connection[]
+    try {
+      const connectionsParsed = JSON.parse(connections) as Connection[]
 
-    const filterConnections = connectionsParsed.filter(({ id }) => id !== connection.id)
+      const filterConnections = connectionsParsed.filter(({ id }) => id !== connection.id)
 
-    localStorage.setItem('connections', JSON.stringify(filterConnections))
+      localStorage.setItem('connections', JSON.stringify(filterConnections))
 
-    handleConnections(filterConnections)
+      handleConnections(filterConnections)
+    } catch (error) {
+      console.error(error)
+      toast.error('Error al eliminar conexión')
+    }
   }
 
   return (

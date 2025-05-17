@@ -1,13 +1,22 @@
-import { Button, useDisclosure } from '@heroui/react'
+import { Button, Input, Select, SelectItem, useDisclosure } from '@heroui/react'
 import useInitialEngineForm from '@renderer/hooks/useInitialEngineForm'
+import { Engine, engines } from '@renderer/interfaces/connection'
+import { useConnectionsStore } from '@renderer/store/connectionsStore'
+import MySQLSvg from '@renderer/svgs/MySQLSvg'
+import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
+import { ReactNode } from '@tanstack/react-router'
 import { JSX } from 'react'
 import { IoMdSettings } from 'react-icons/io'
+import { IoSearch } from 'react-icons/io5'
 import { TbDatabasePlus } from 'react-icons/tb'
 
 import SettingsModal from '../general/SettingsModal'
 import EngineDatabaseForm from './EngineDatabaseForm'
 
 function HomeMenu(): JSX.Element {
+  const { searchConnection, selectedEngines, handleSearchConnection, handleSelectedEngines } =
+    useConnectionsStore()
+
   const {
     isOpen: isOpenEngineDatabaseForm,
     onOpen: onOpenEngineDatabaseForm,
@@ -24,17 +33,53 @@ function HomeMenu(): JSX.Element {
 
   useInitialEngineForm({ onOpenChangeEngineDatabaseForm })
 
+  const renderEngineSvg = (engine: Engine): ReactNode => {
+    switch (engine) {
+      case 'PostgreSQL':
+        return <PostgreSQLSvg width={24} height={24} />
+      case 'MySQL':
+        return <MySQLSvg width={24} height={24} />
+      default:
+        return null
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-center gap-2">
-        <div>
+        <div className="flex items-center gap-2">
           <Button
             color="primary"
+            size="md"
+            className="w-full max-w-40"
             startContent={<TbDatabasePlus className="w-5 h-5" />}
             onPress={onOpenEngineDatabaseForm}
           >
             Añadir conexión
           </Button>
+
+          <Input
+            placeholder="Buscar conexión por su nombre"
+            size="md"
+            className="w-72"
+            startContent={<IoSearch className="w-5 h-5" />}
+            value={searchConnection}
+            onValueChange={handleSearchConnection}
+          />
+
+          <Select
+            aria-label="engines"
+            className="w-44"
+            selectionMode="multiple"
+            selectedKeys={selectedEngines}
+            onSelectionChange={handleSelectedEngines}
+          >
+            {engines.map((engine) => (
+              <SelectItem key={engine} startContent={renderEngineSvg(engine)}>
+                {engine}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
 
         <div>

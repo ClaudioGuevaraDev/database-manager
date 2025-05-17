@@ -22,6 +22,7 @@ import { BsEyeFill } from 'react-icons/bs'
 import { FaSave } from 'react-icons/fa'
 import { HiMiniEyeSlash } from 'react-icons/hi2'
 import { IoExitOutline } from 'react-icons/io5'
+import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
 const initialConnectionForm: ConnectionForm = {
@@ -64,6 +65,8 @@ function EngineDatabaseForm({
 
   useHandleBaseForm({ baseForm: baseForm, edit: edit, setForm: setForm })
 
+  const selectedEngine = Array.from(form.engine)[0] as Engine
+
   const renderEngineSvg = (engine: Engine): ReactNode => {
     switch (engine) {
       case 'PostgreSQL':
@@ -96,7 +99,7 @@ function EngineDatabaseForm({
             ? {
                 ...form,
                 id: connectionID,
-                engine: Array.from(form.engine)[0] as Engine
+                engine: selectedEngine
               }
             : connection
         )
@@ -105,17 +108,21 @@ function EngineDatabaseForm({
           {
             ...form,
             id: uuidv4(),
-            engine: Array.from(form.engine)[0] as Engine
+            engine: selectedEngine
           },
           ...connectionsParsed
         ]
       }
 
-      localStorage.setItem('connections', JSON.stringify(newConnections))
-
-      handleConnections(newConnections)
-      setForm(initialConnectionForm)
-      onClose()
+      try {
+        localStorage.setItem('connections', JSON.stringify(newConnections))
+        handleConnections(newConnections)
+        setForm(initialConnectionForm)
+        onClose()
+      } catch (error) {
+        console.error(error)
+        toast.error('Error al guardar la conexión')
+      }
     }
   }
 
@@ -130,7 +137,7 @@ function EngineDatabaseForm({
     >
       <ModalContent>
         <form onSubmit={handleSubmit}>
-          <ModalHeader className="text-xl">Crear nueva conexión</ModalHeader>
+          <ModalHeader className="text-xl">{edit ? 'Editar' : 'Crear nueva'} conexión</ModalHeader>
           <Divider className="mb-2" />
           <ModalBody>
             <div className="grid grid-cols-2 gap-3">
@@ -161,18 +168,33 @@ function EngineDatabaseForm({
               />
               <Input
                 label="Puerto"
+                placeholder={
+                  selectedEngine === 'MySQL'
+                    ? '3306'
+                    : selectedEngine === 'PostgreSQL'
+                      ? '5432'
+                      : ''
+                }
                 isRequired
                 value={form.port}
                 onValueChange={(value) => setForm({ ...form, port: value })}
               />
               <Input
                 label="Usuario"
+                placeholder={
+                  selectedEngine === 'MySQL'
+                    ? 'root'
+                    : selectedEngine === 'PostgreSQL'
+                      ? 'postgres'
+                      : ''
+                }
                 isRequired
                 value={form.username}
                 onValueChange={(value) => setForm({ ...form, username: value })}
               />
               <Input
                 label="Contraseña"
+                placeholder="********"
                 type={showPort ? 'text' : 'password'}
                 isRequired
                 value={form.password}
@@ -217,7 +239,7 @@ function EngineDatabaseForm({
             >
               Probar
             </Button>
-            {connections.length === 0 && (
+            {connections.length > 0 && (
               <Button onPress={onClose} startContent={<IoExitOutline className="w-5 h-5" />}>
                 Cerrar
               </Button>
