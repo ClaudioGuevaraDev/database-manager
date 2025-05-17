@@ -1,5 +1,5 @@
 import { Button, useDisclosure } from '@heroui/react'
-import { Connection } from '@renderer/interfaces/connection'
+import useInitialEngineForm from '@renderer/hooks/useInitialEngineForm'
 import { JSX } from 'react'
 import { IoMdSettings } from 'react-icons/io'
 import { TbDatabasePlus } from 'react-icons/tb'
@@ -7,18 +7,13 @@ import { TbDatabasePlus } from 'react-icons/tb'
 import SettingsModal from '../general/SettingsModal'
 import EngineDatabaseForm from './EngineDatabaseForm'
 
-interface Props {
-  connections: Connection[]
-  setConnections: (value: Connection[]) => void
-}
-
-function HomeMenu({ connections, setConnections }: Props): JSX.Element {
+function HomeMenu(): JSX.Element {
   const {
     isOpen: isOpenEngineDatabaseForm,
     onOpen: onOpenEngineDatabaseForm,
     onOpenChange: onOpenChangeEngineDatabaseForm,
     onClose: onCloseEngineDatabaseForm
-  } = useDisclosure({ defaultOpen: connections.length === 0 })
+  } = useDisclosure()
 
   const {
     isOpen: isOpenSettings,
@@ -26,6 +21,8 @@ function HomeMenu({ connections, setConnections }: Props): JSX.Element {
     onOpenChange: onOpenChangeSettings,
     onClose: onCloseSettings
   } = useDisclosure()
+
+  useInitialEngineForm({ onOpenChangeEngineDatabaseForm })
 
   return (
     <>
@@ -51,8 +48,7 @@ function HomeMenu({ connections, setConnections }: Props): JSX.Element {
         isOpen={isOpenEngineDatabaseForm}
         onOpenChange={onOpenChangeEngineDatabaseForm}
         onClose={onCloseEngineDatabaseForm}
-        connections={connections}
-        setConnections={setConnections}
+        edit={false}
       />
 
       <SettingsModal

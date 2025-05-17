@@ -8,11 +8,12 @@ import {
   ModalFooter,
   ModalHeader,
   Select,
-  Selection,
   SelectItem,
   Switch
 } from '@heroui/react'
-import { Connection, Engine, engines } from '@renderer/interfaces/connection'
+import useHandleBaseForm from '@renderer/hooks/useHandleBaseForm'
+import { Connection, ConnectionForm, Engine, engines } from '@renderer/interfaces/connection'
+import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import MySQLSvg from '@renderer/svgs/MySQLSvg'
 import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
 import { FormEvent, JSX, ReactNode, useState } from 'react'
@@ -21,17 +22,7 @@ import { BsEyeFill } from 'react-icons/bs'
 import { FaSave } from 'react-icons/fa'
 import { HiMiniEyeSlash } from 'react-icons/hi2'
 import { IoExitOutline } from 'react-icons/io5'
-
-interface ConnectionForm {
-  name: string
-  engine: Selection
-  host: string
-  port: string
-  username: string
-  password: string
-  database: string
-  ssl: boolean
-}
+import { v4 as uuidv4 } from 'uuid'
 
 const initialConnectionForm: ConnectionForm = {
   name: '',
@@ -50,20 +41,28 @@ interface Props {
   isOpen: boolean
   onOpenChange: (value: boolean) => void
   onClose: () => void
-  connections: Connection[]
-  setConnections: (value: Connection[]) => void
+  edit: boolean
+  baseForm?: ConnectionForm
+  connectionID?: string
 }
 
 function EngineDatabaseForm({
   isOpen,
   onOpenChange,
   onClose,
-  connections,
-  setConnections
+  edit,
+  baseForm,
+  connectionID
 }: Props): JSX.Element {
-  const [form, setForm] = useState<ConnectionForm>(initialConnectionForm)
+  const [form, setForm] = useState<ConnectionForm>(
+    edit && baseForm ? baseForm : initialConnectionForm
+  )
   const [action, setAction] = useState<FormAction | undefined>(undefined)
   const [showPort, setShowPort] = useState(false)
+
+  const { connections, handleConnections } = useConnectionsStore()
+
+  useHandleBaseForm({ baseForm: baseForm, edit: edit, setForm: setForm })
 
   const renderEngineSvg = (engine: Engine): ReactNode => {
     switch (engine) {
@@ -89,17 +88,32 @@ function EngineDatabaseForm({
 
       const connectionsParsed = JSON.parse(connections) as Connection[]
 
-      const newConnections: Connection[] = [
-        {
-          ...form,
-          engine: Array.from(form.engine)[0] as Engine
-        },
-        ...connectionsParsed
-      ]
+      let newConnections: Connection[] = []
+
+      if (edit && baseForm) {
+        newConnections = connectionsParsed.map((connection) =>
+          connection.id === connectionID
+            ? {
+                ...form,
+                id: connectionID,
+                engine: Array.from(form.engine)[0] as Engine
+              }
+            : connection
+        )
+      } else {
+        newConnections = [
+          {
+            ...form,
+            id: uuidv4(),
+            engine: Array.from(form.engine)[0] as Engine
+          },
+          ...connectionsParsed
+        ]
+      }
 
       localStorage.setItem('connections', JSON.stringify(newConnections))
 
-      setConnections(newConnections)
+      handleConnections(newConnections)
       setForm(initialConnectionForm)
       onClose()
     }
@@ -203,7 +217,7 @@ function EngineDatabaseForm({
             >
               Probar
             </Button>
-            {connections.length > 0 && (
+            {connections.length === 0 && (
               <Button onPress={onClose} startContent={<IoExitOutline className="w-5 h-5" />}>
                 Cerrar
               </Button>

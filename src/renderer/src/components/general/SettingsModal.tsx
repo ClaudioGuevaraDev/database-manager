@@ -33,6 +33,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
             <p className="font-medium text-base">Modo oscuro</p>
             <Switch
               size="lg"
+              color="secondary"
               startContent={<FaMoon />}
               endContent={<IoMdSunny />}
               isSelected={theme === 'dark'}

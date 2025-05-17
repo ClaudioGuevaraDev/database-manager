@@ -1,53 +1,155 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider } from '@heroui/react'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure
+} from '@heroui/react'
 import { Connection } from '@renderer/interfaces/connection'
+import { useConnectionsStore } from '@renderer/store/connectionsStore'
+import MySQLSvg from '@renderer/svgs/MySQLSvg'
 import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
 import { JSX } from 'react'
+import { IoExitOutline } from 'react-icons/io5'
 import { TbDatabaseEdit, TbDatabaseImport, TbDatabaseX } from 'react-icons/tb'
+
+import EngineDatabaseForm from './EngineDatabaseForm'
 
 interface Props {
   connection: Connection
 }
 
 function ConnectionCard({ connection }: Props): JSX.Element {
+  const { handleConnections } = useConnectionsStore()
+
+  const {
+    isOpen: isOpenDeleteConnection,
+    onOpen: onOpenDeleteConnection,
+    onOpenChange: onOpenChangeDeleteConnection,
+    onClose: onCloseDeleteConnection
+  } = useDisclosure()
+
+  const {
+    isOpen: isOpenEngineDatabaseForm,
+    onOpen: onOpenEngineDatabaseForm,
+    onOpenChange: onOpenChangeEngineDatabaseForm,
+    onClose: onCloseEngineDatabaseForm
+  } = useDisclosure()
+
+  const handleDeleteConnection = (): void => {
+    const connections = localStorage.getItem('connections')
+
+    if (connections == null) {
+      return
+    }
+
+    const connectionsParsed = JSON.parse(connections) as Connection[]
+
+    const filterConnections = connectionsParsed.filter(({ id }) => id !== connection.id)
+
+    localStorage.setItem('connections', JSON.stringify(filterConnections))
+
+    handleConnections(filterConnections)
+  }
+
   return (
-    <Card>
-      <CardHeader className="flex gap-3">
-        <PostgreSQLSvg width={40} height={40} />
-        <p className="text-md truncate">{connection.name}</p>
-      </CardHeader>
-      <Divider />
-      <CardBody>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <p className="text-sm font-semibold">Host</p>
-            <span className="text-lg">{connection.host}</span>
+    <>
+      <Card>
+        <CardHeader className="flex gap-3">
+          {connection.engine === 'PostgreSQL' && <PostgreSQLSvg width={40} height={40} />}
+          {connection.engine === 'MySQL' && <MySQLSvg width={40} height={40} />}
+          <p className="text-md truncate">{connection.name}</p>
+        </CardHeader>
+        <Divider />
+        <CardBody>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Host</p>
+              <span className="text-lg">{connection.host}</span>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Puerto</p>
+              <span className="text-lg">{connection.port}</span>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Usuario</p>
+              <span className="text-lg">{connection.username}</span>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Contraseña</p>
+              <span className="text-lg">{connection.password.replace(/.(?=.{0})/g, '*')}</span>
+            </div>
           </div>
-          <div className="space-y-2">
-            <p className="text-sm font-semibold">Puerto</p>
-            <span className="text-lg">{connection.port}</span>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm font-semibold">Usuario</p>
-            <span className="text-lg">{connection.username}</span>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm font-semibold">Contraseña</p>
-            <span className="text-lg">{connection.password.replace(/.(?=.{2})/g, '*')}</span>
-          </div>
-        </div>
-      </CardBody>
-      <CardFooter className="flex justify-between gap-2">
-        <Button color="primary" startContent={<TbDatabaseImport className="w-6 h-6" />}>
-          Conectar
-        </Button>
-        <Button color="warning" startContent={<TbDatabaseEdit className="w-6 h-6" />}>
-          Editar
-        </Button>
-        <Button color="danger" startContent={<TbDatabaseX className="w-6 h-6" />}>
-          Eliminar
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardBody>
+        <CardFooter className="flex justify-between gap-2">
+          <Button color="primary" startContent={<TbDatabaseImport className="w-6 h-6" />}>
+            Conectar
+          </Button>
+          <Button
+            color="warning"
+            startContent={<TbDatabaseEdit className="w-6 h-6" />}
+            onPress={onOpenEngineDatabaseForm}
+          >
+            Editar
+          </Button>
+          <Button
+            color="danger"
+            startContent={<TbDatabaseX className="w-6 h-6" />}
+            onPress={onOpenDeleteConnection}
+          >
+            Eliminar
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <Modal isOpen={isOpenDeleteConnection} onOpenChange={onOpenChangeDeleteConnection}>
+        <ModalContent>
+          <ModalHeader className="text-xl">
+            <p className="truncate">Eliminar conexión {connection.name}</p>
+          </ModalHeader>
+          <Divider />
+          <ModalFooter>
+            <Button
+              color="danger"
+              startContent={<TbDatabaseX className="w-5 h-5" />}
+              onPress={handleDeleteConnection}
+            >
+              Eliminar
+            </Button>
+            <Button
+              onPress={onCloseDeleteConnection}
+              startContent={<IoExitOutline className="w-5 h-5" />}
+            >
+              Cerrar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <EngineDatabaseForm
+        edit={true}
+        isOpen={isOpenEngineDatabaseForm}
+        onOpenChange={onOpenChangeEngineDatabaseForm}
+        onClose={onCloseEngineDatabaseForm}
+        baseForm={{
+          database: connection.database,
+          host: connection.host,
+          name: connection.name,
+          password: connection.password,
+          port: connection.port,
+          ssl: connection.ssl,
+          username: connection.username,
+          engine: new Set([connection.engine])
+        }}
+        connectionID={connection.id}
+      />
+    </>
   )
 }
 
