@@ -6,6 +6,7 @@ import MySQLSvg from '@renderer/svgs/MySQLSvg'
 import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
 import { ReactNode } from '@tanstack/react-router'
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { IoMdSettings } from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5'
 import { TbDatabasePlus } from 'react-icons/tb'
@@ -16,6 +17,8 @@ import EngineDatabaseForm from './EngineDatabaseForm'
 function HomeMenu(): JSX.Element {
   const { searchConnection, selectedEngines, handleSearchConnection, handleSelectedEngines } =
     useConnectionsStore()
+
+  const { t } = useTranslation()
 
   const {
     isOpen: isOpenEngineDatabaseForm,
@@ -55,11 +58,11 @@ function HomeMenu(): JSX.Element {
             startContent={<TbDatabasePlus className="w-5 h-5" />}
             onPress={onOpenEngineDatabaseForm}
           >
-            Añadir conexión
+            {t('home.menu.add_connection')}
           </Button>
 
           <Input
-            placeholder="Buscar conexión por su nombre"
+            placeholder={t('home.menu.search_connection')}
             size="md"
             className="w-72"
             startContent={<IoSearch className="w-5 h-5" />}

@@ -1,0 +1,44 @@
+{
+  "home": {
+    "menu": {
+      "add_connection": "Add connection",
+      "search_connection": "Search connection by name",
+      "create_new_connection": "Create new connection",
+      "edit_connection": "Edit connection",
+      "connection_name": "Connection name",
+      "database_engine": "Database engine",
+      "host": "Host",
+      "port": "Port",
+      "username": "Username",
+      "password": "Password",
+      "database": "Database",
+      "ssl": "SSL",
+      "save": "Save",
+      "test": "Test",
+      "close": "Close"
+    },
+    "list": {
+      "without_connections": "No connections",
+      "host": "Host",
+      "port": "Port",
+      "username": "Username",
+      "password": "Password",
+      "database": "Database",
+      "connect": "Connect",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_connection": "Delete connection",
+      "close": "Close"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "dark_mode": "Dark mode",
+    "close": "Close",
+    "language": "Language",
+    "languages": {
+      "english": "English",
+      "spanish": "Spanish"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "home": {
+    "menu": {
+      "add_connection": "Añadir conexión",
+      "search_connection": "Buscar conexión por su nombre",
+      "create_new_connection": "Crear nueva conexión",
+      "edit_connection": "Editar conexión",
+      "connection_name": "Nombre de la conexión",
+      "database_engine": "Motor de base de datos",
+      "host": "Servidor",
+      "port": "Puerto",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "database": "Base de datos",
+      "ssl": "SSL",
+      "save": "Guardar",
+      "test": "Probar",
+      "close": "Cerrar"
+    },
+    "list": {
+      "without_connections": "Sin conexiones",
+      "host": "Servidor",
+      "port": "Puerto",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "database": "Base de datos",
+      "connect": "Conectar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "delete_connection": "Eliminar conexión",
+      "close": "Cerrar"
+    }
+  },
+  "settings": {
+    "title": "Configuraciones",
+    "dark_mode": "Modo oscuro",
+    "close": "Cerrar",
+    "language": "Idioma",
+    "languages": {
+      "english": "Inglés",
+      "spanish": "Español"
+    }
+  }
+}

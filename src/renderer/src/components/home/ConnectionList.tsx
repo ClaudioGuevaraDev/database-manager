@@ -1,11 +1,13 @@
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsDatabaseFillX } from 'react-icons/bs'
 
 import ConnectionCard from './ConnectionCard'
 
 function ConnectionList(): JSX.Element {
   const { connections, searchConnection, selectedEngines } = useConnectionsStore()
+  const { t } = useTranslation()
 
   const filterConnections = connections
     .filter((connection) =>
@@ -26,7 +28,7 @@ function ConnectionList(): JSX.Element {
         (searchConnection !== '' || Array.from(selectedEngines).length === 0) && (
           <div className="flex items-center flex-col gap-6 justify-center col-span-12 mt-16">
             <BsDatabaseFillX className="w-20 h-20" />
-            <p className="text-3xl font-semibold">Sin conexiones</p>
+            <p className="text-3xl font-semibold">{t('home.list.without_connections')}</p>
           </div>
         )}
     </div>

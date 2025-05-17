@@ -16,6 +16,7 @@ import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import MySQLSvg from '@renderer/svgs/MySQLSvg'
 import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
 import { JSX } from 'react'
+import { useTranslation } from 'react-i18next'
 import { IoExitOutline } from 'react-icons/io5'
 import { TbDatabaseEdit, TbDatabaseImport, TbDatabaseX } from 'react-icons/tb'
 import { toast } from 'sonner'
@@ -28,6 +29,7 @@ interface Props {
 
 function ConnectionCard({ connection }: Props): JSX.Element {
   const { handleConnections } = useConnectionsStore()
+  const { t } = useTranslation()
 
   const {
     isOpen: isOpenDeleteConnection,
@@ -76,40 +78,40 @@ function ConnectionCard({ connection }: Props): JSX.Element {
         <CardBody>
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-2">
-              <p className="text-sm font-semibold">Host</p>
+              <p className="text-sm font-semibold">{t('home.list.host')}</p>
               <span className="text-lg">{connection.host}</span>
             </div>
             <div className="space-y-2">
-              <p className="text-sm font-semibold">Puerto</p>
+              <p className="text-sm font-semibold">{t('home.list.port')}</p>
               <span className="text-lg">{connection.port}</span>
             </div>
             <div className="space-y-2">
-              <p className="text-sm font-semibold">Usuario</p>
+              <p className="text-sm font-semibold">{t('home.list.username')}</p>
               <span className="text-lg">{connection.username}</span>
             </div>
             <div className="space-y-2">
-              <p className="text-sm font-semibold">Contraseña</p>
+              <p className="text-sm font-semibold">{t('home.list.password')}</p>
               <span className="text-lg">{connection.password.replace(/.(?=.{0})/g, '*')}</span>
             </div>
           </div>
         </CardBody>
         <CardFooter className="flex justify-between gap-2">
           <Button color="primary" startContent={<TbDatabaseImport className="w-6 h-6" />}>
-            Conectar
+            {t('home.list.connect')}
           </Button>
           <Button
             color="warning"
             startContent={<TbDatabaseEdit className="w-6 h-6" />}
             onPress={onOpenEngineDatabaseForm}
           >
-            Editar
+            {t('home.list.edit')}
           </Button>
           <Button
             color="danger"
             startContent={<TbDatabaseX className="w-6 h-6" />}
             onPress={onOpenDeleteConnection}
           >
-            Eliminar
+            {t('home.list.delete')}
           </Button>
         </CardFooter>
       </Card>
@@ -117,7 +119,9 @@ function ConnectionCard({ connection }: Props): JSX.Element {
       <Modal isOpen={isOpenDeleteConnection} onOpenChange={onOpenChangeDeleteConnection}>
         <ModalContent>
           <ModalHeader className="text-xl">
-            <p className="truncate">Eliminar conexión {connection.name}</p>
+            <p className="truncate">
+              {t('home.list.delete_connection')} {connection.name}
+            </p>
           </ModalHeader>
           <Divider />
           <ModalFooter>
@@ -126,13 +130,13 @@ function ConnectionCard({ connection }: Props): JSX.Element {
               startContent={<TbDatabaseX className="w-5 h-5" />}
               onPress={handleDeleteConnection}
             >
-              Eliminar
+              {t('home.list.delete')}
             </Button>
             <Button
               onPress={onCloseDeleteConnection}
               startContent={<IoExitOutline className="w-5 h-5" />}
             >
-              Cerrar
+              {t('home.list.close')}
             </Button>
           </ModalFooter>
         </ModalContent>
