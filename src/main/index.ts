@@ -1,8 +1,9 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { join } from 'path'
 
 import icon from '../../resources/icon.png?asset'
+import { checkConnectionDatabaseEvent } from './events'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -31,6 +32,8 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ipcMain.handle('check_database_connection', checkConnectionDatabaseEvent)
 }
 
 app.whenReady().then(() => {

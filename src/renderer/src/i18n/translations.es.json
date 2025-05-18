@@ -15,7 +15,9 @@
       "ssl": "SSL",
       "save": "Guardar",
       "test": "Probar",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "connection_error": "No se puede conectar al servidor",
+      "successful_connection": "Conexión exitosa"
     },
     "list": {
       "without_connections": "Sin conexiones",

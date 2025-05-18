@@ -61,6 +61,8 @@ function EngineDatabaseForm({
   )
   const [action, setAction] = useState<FormAction | undefined>(undefined)
   const [showPort, setShowPort] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [testing, setTesting] = useState(false)
 
   const { connections, handleConnections } = useConnectionsStore()
   const { t } = useTranslation()
@@ -80,10 +82,42 @@ function EngineDatabaseForm({
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
 
+    const newConnection: Connection = {
+      ...form,
+      engine: selectedEngine,
+      id: edit && connectionID ? connectionID : uuidv4()
+    }
+
+    if (action === 'test') {
+      setTesting(true)
+
+      try {
+        const check = (await window.electron.ipcRenderer.invoke(
+          'check_database_connection',
+          newConnection
+        )) as boolean
+
+        if (!check) {
+          throw new Error()
+        }
+
+        toast.success(t('home.menu.successful_connection'))
+      } catch (error) {
+        console.error(error)
+        toast.error(t('home.menu.connection_error'))
+      }
+
+      setTesting(false)
+
+      return
+    }
+
     if (action === 'save') {
+      setSaving(true)
+
       let connections = localStorage.getItem('connections')
 
       if (connections == null) {
@@ -93,36 +127,44 @@ function EngineDatabaseForm({
 
       const connectionsParsed = JSON.parse(connections) as Connection[]
 
+      try {
+        const check = (await window.electron.ipcRenderer.invoke(
+          'check_database_connection',
+          newConnection
+        )) as boolean
+
+        if (!check) {
+          throw new Error()
+        }
+      } catch (error) {
+        console.error(error)
+        setSaving(false)
+        toast.error(t('home.menu.connection_error'))
+        return
+      }
+
       let newConnections: Connection[] = []
 
       if (edit && baseForm) {
         newConnections = connectionsParsed.map((connection) =>
-          connection.id === connectionID
-            ? {
-                ...form,
-                id: connectionID,
-                engine: selectedEngine
-              }
-            : connection
+          connection.id === connectionID ? newConnection : connection
         )
       } else {
-        newConnections = [
-          {
-            ...form,
-            id: uuidv4(),
-            engine: selectedEngine
-          },
-          ...connectionsParsed
-        ]
+        newConnections = [newConnection, ...connectionsParsed]
       }
 
       try {
         localStorage.setItem('connections', JSON.stringify(newConnections))
         handleConnections(newConnections)
         setForm(initialConnectionForm)
+
+        setSaving(false)
+        toast.success(t('home.menu.successful_connection'))
+
         onClose()
       } catch (error) {
         console.error(error)
+        setSaving(false)
         toast.error('Error al guardar la conexión')
       }
     }
@@ -136,6 +178,7 @@ function EngineDatabaseForm({
       hideCloseButton={connections.length === 0}
       isDismissable={connections.length !== 0}
       isKeyboardDismissDisabled={connections.length === 0}
+      onClose={() => setForm(edit && baseForm ? baseForm : initialConnectionForm)}
     >
       <ModalContent>
         <form onSubmit={handleSubmit}>
@@ -232,6 +275,7 @@ function EngineDatabaseForm({
               type="submit"
               startContent={<FaSave className="w-5 h-5" />}
               onPress={() => setAction('save')}
+              isLoading={saving}
             >
               {t('home.menu.save')}
             </Button>
@@ -240,11 +284,18 @@ function EngineDatabaseForm({
               type="submit"
               startContent={<BsDatabaseCheck className="w-5 h-5" />}
               onPress={() => setAction('test')}
+              isLoading={testing}
             >
               {t('home.menu.test')}
             </Button>
             {connections.length > 0 && (
-              <Button onPress={onClose} startContent={<IoExitOutline className="w-5 h-5" />}>
+              <Button
+                onPress={() => {
+                  setForm(edit && baseForm ? baseForm : initialConnectionForm)
+                  onClose()
+                }}
+                startContent={<IoExitOutline className="w-5 h-5" />}
+              >
                 {t('home.menu.close')}
               </Button>
             )}
