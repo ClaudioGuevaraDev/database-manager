@@ -15,6 +15,7 @@ import { Connection } from '@renderer/interfaces/connection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import MySQLSvg from '@renderer/svgs/MySQLSvg'
 import PostgreSQLSvg from '@renderer/svgs/PostgreSQLSvg'
+import { useNavigate } from '@tanstack/react-router'
 import { JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoExitOutline } from 'react-icons/io5'
@@ -30,6 +31,7 @@ interface Props {
 function ConnectionCard({ connection }: Props): JSX.Element {
   const { handleConnections } = useConnectionsStore()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const {
     isOpen: isOpenDeleteConnection,
@@ -66,6 +68,10 @@ function ConnectionCard({ connection }: Props): JSX.Element {
     }
   }
 
+  const handleRedirectPlayground = (): void => {
+    navigate({ to: '/playground' })
+  }
+
   return (
     <>
       <Card>
@@ -96,7 +102,11 @@ function ConnectionCard({ connection }: Props): JSX.Element {
           </div>
         </CardBody>
         <CardFooter className="flex justify-between gap-2">
-          <Button color="primary" startContent={<TbDatabaseImport className="w-6 h-6" />}>
+          <Button
+            color="primary"
+            startContent={<TbDatabaseImport className="w-6 h-6" />}
+            onPress={handleRedirectPlayground}
+          >
             {t('home.list.connect')}
           </Button>
           <Button
