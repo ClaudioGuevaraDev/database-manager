@@ -36,14 +36,12 @@ function RouteComponent(): JSX.Element {
       return
     }
 
-    if (search.id) {
-      const foundConnection = filterConnections.find((connection) => connection.id === search.id)
+    const foundConnection = filterConnections.find((connection) => connection.id === search.id)
 
-      if (foundConnection != null) {
-        setSelectedConnection(search.id)
-      } else {
-        setSelectedConnection(filterConnections[0].id)
-      }
+    if (foundConnection != null) {
+      setSelectedConnection(search.id)
+    } else {
+      setSelectedConnection(filterConnections[0].id)
     }
   }, [connections, search])
 
