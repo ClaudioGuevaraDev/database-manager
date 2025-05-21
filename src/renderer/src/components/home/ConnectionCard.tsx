@@ -26,9 +26,10 @@ import EngineDatabaseForm from './EngineDatabaseForm'
 
 interface Props {
   connection: Connection
+  isPlayground: boolean
 }
 
-function ConnectionCard({ connection }: Props): JSX.Element {
+function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
   const { handleConnections } = useConnectionsStore()
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -86,7 +87,7 @@ function ConnectionCard({ connection }: Props): JSX.Element {
     handleConnections(newConnections)
     localStorage.setItem('connections', JSON.stringify(newConnections))
 
-    navigate({ to: '/playground' })
+    navigate({ to: '/playground', search: { id: connection.id } })
   }
 
   return (
@@ -126,20 +127,24 @@ function ConnectionCard({ connection }: Props): JSX.Element {
           >
             {t('home.list.connect')}
           </Button>
-          <Button
-            color="warning"
-            startContent={<TbDatabaseEdit className="w-6 h-6" />}
-            onPress={onOpenEngineDatabaseForm}
-          >
-            {t('home.list.edit')}
-          </Button>
-          <Button
-            color="danger"
-            startContent={<TbDatabaseX className="w-6 h-6" />}
-            onPress={onOpenDeleteConnection}
-          >
-            {t('home.list.delete')}
-          </Button>
+          {!isPlayground && (
+            <Button
+              color="warning"
+              startContent={<TbDatabaseEdit className="w-6 h-6" />}
+              onPress={onOpenEngineDatabaseForm}
+            >
+              {t('home.list.edit')}
+            </Button>
+          )}
+          {!isPlayground && (
+            <Button
+              color="danger"
+              startContent={<TbDatabaseX className="w-6 h-6" />}
+              onPress={onOpenDeleteConnection}
+            >
+              {t('home.list.delete')}
+            </Button>
+          )}
         </CardFooter>
       </Card>
 

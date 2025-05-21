@@ -14,7 +14,11 @@ import { TbDatabasePlus } from 'react-icons/tb'
 import SettingsModal from '../general/SettingsModal'
 import EngineDatabaseForm from './EngineDatabaseForm'
 
-function HomeMenu(): JSX.Element {
+interface Props {
+  isPlayground: boolean
+}
+
+function HomeMenu({ isPlayground }: Props): JSX.Element {
   const { searchConnection, selectedEngines, handleSearchConnection, handleSelectedEngines } =
     useConnectionsStore()
 
@@ -51,15 +55,17 @@ function HomeMenu(): JSX.Element {
     <>
       <div className="flex justify-between items-center gap-2">
         <div className="flex items-center gap-2">
-          <Button
-            color="primary"
-            size="md"
-            className="w-full max-w-40"
-            startContent={<TbDatabasePlus className="w-5 h-5" />}
-            onPress={onOpenEngineDatabaseForm}
-          >
-            {t('home.menu.add_connection')}
-          </Button>
+          {!isPlayground && (
+            <Button
+              color="primary"
+              size="md"
+              className="w-full max-w-40"
+              startContent={<TbDatabasePlus className="w-5 h-5" />}
+              onPress={onOpenEngineDatabaseForm}
+            >
+              {t('home.menu.add_connection')}
+            </Button>
+          )}
 
           <Input
             placeholder={t('home.menu.search_connection')}

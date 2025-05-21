@@ -25,10 +25,10 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent(): JSX.Element {
   return (
-    <div className="p-4 space-y-5">
-      <HomeMenu />
+    <div className="p-4 space-y-4">
+      <HomeMenu isPlayground={false} />
 
-      <ConnectionList />
+      <ConnectionList isPlayground={false} />
     </div>
   )
 }
