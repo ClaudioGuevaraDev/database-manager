@@ -69,6 +69,23 @@ function ConnectionCard({ connection }: Props): JSX.Element {
   }
 
   const handleRedirectPlayground = (): void => {
+    const connectionsStore = localStorage.getItem('connections')
+
+    if (connectionsStore == null) {
+      return
+    }
+
+    const parsedConnections = JSON.parse(connectionsStore) as Connection[]
+
+    const newConnections = parsedConnections.map((parsedConnection) =>
+      parsedConnection.id === connection.id
+        ? { ...parsedConnection, active: true }
+        : parsedConnection
+    )
+
+    handleConnections(newConnections)
+    localStorage.setItem('connections', JSON.stringify(newConnections))
+
     navigate({ to: '/playground' })
   }
 

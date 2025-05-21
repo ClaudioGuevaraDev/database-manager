@@ -13,6 +13,7 @@ export interface Connection {
   password: string
   database: string
   ssl: boolean
+  active: boolean
 }
 
 export interface ConnectionForm {

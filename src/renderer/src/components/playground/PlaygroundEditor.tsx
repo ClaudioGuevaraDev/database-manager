@@ -4,7 +4,7 @@ import Editor from '@monaco-editor/react'
 import { editor } from 'monaco-editor'
 import { JSX, useRef, useState } from 'react'
 
-const LINE_HEIGHT_DEFAULT = 28
+const LINE_HEIGHT_DEFAULT = 24
 const MAX_HEIGHT = 200
 const PADDING_EXTRA = 20
 
@@ -34,7 +34,7 @@ function PlaygroundEditor(): JSX.Element {
             language="sql"
             theme={theme === 'dark' ? 'vs-dark' : 'vs'}
             options={{
-              fontSize: 28,
+              fontSize: 24,
               minimap: {
                 enabled: false
               },

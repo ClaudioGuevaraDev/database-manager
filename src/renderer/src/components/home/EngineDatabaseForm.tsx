@@ -88,7 +88,8 @@ function EngineDatabaseForm({
     const newConnection: Connection = {
       ...form,
       engine: selectedEngine,
-      id: edit && connectionID ? connectionID : uuidv4()
+      id: edit && connectionID ? connectionID : uuidv4(),
+      active: false
     }
 
     if (action === 'test') {
