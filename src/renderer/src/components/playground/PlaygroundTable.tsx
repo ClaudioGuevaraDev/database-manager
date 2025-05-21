@@ -4,7 +4,7 @@ import { JSX } from 'react'
 function PlaygroundTable(): JSX.Element {
   return (
     <div className="flex-1">
-      <Table shadow="md">
+      <Table shadow="md" aria-label="table">
         <TableHeader>
           <TableColumn>ID</TableColumn>
         </TableHeader>

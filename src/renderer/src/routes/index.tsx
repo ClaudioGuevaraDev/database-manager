@@ -1,6 +1,5 @@
 import ConnectionList from '@renderer/components/home/ConnectionList'
 import HomeMenu from '@renderer/components/home/HomeMenu'
-import useGetConnections from '@renderer/hooks/useGetConnections'
 import { Connection } from '@renderer/interfaces/connection'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { JSX } from 'react'
@@ -25,8 +24,6 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent(): JSX.Element {
-  useGetConnections()
-
   return (
     <div className="p-4 space-y-5">
       <HomeMenu />
