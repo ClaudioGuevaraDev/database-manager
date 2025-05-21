@@ -25,6 +25,7 @@
     "@electron-toolkit/utils": "4.0.0",
     "@heroui/react": "2.7.8",
     "@heroui/use-theme": "2.1.8",
+    "@monaco-editor/react": "4.7.0",
     "@tanstack/react-router": "1.120.3",
     "electron-updater": "6.3.9",
     "framer-motion": "12.11.4",
