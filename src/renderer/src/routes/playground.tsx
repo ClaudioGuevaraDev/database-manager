@@ -77,7 +77,7 @@ function RouteComponent(): JSX.Element {
               key={connection.id}
               title={
                 <Chip
-                  className="bg-transparent"
+                  className={`bg-transparent ${connection.id === selectedConnection ? 'text-white ' : 'text-gray-900 dark:text-white'}`}
                   onClose={() => handleDesactiveConnection(connection.id)}
                 >
                   {connection.name}
