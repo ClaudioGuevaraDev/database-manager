@@ -1,12 +1,41 @@
 import { Button, Divider, useDisclosure } from '@heroui/react'
-import { JSX } from 'react'
+import { Tree } from '@renderer/interfaces/playground'
+import { JSX, useState } from 'react'
 import TreeView, { flattenTree } from 'react-accessible-treeview'
 import { IoMdSettings } from 'react-icons/io'
+import { v4 as uuidv4 } from 'uuid'
 
 import SettingsModal from '../general/SettingsModal'
 import PlaygroundSidebarItem from './PlaygroundSidebarItem'
 
 function PlaygroundSidebar(): JSX.Element {
+  const [tree, setTree] = useState<Tree>({
+    name: '',
+    metadata: { id: uuidv4(), type: '', active: false },
+    children: [
+      {
+        name: 'Base de datos 1',
+        metadata: {
+          id: uuidv4(),
+          type: 'database',
+          active: false
+        },
+        children: [
+          {
+            name: 'usuarios',
+            metadata: { id: uuidv4(), type: 'table', active: false },
+            children: []
+          },
+          {
+            name: 'animales',
+            metadata: { id: uuidv4(), type: 'table', active: false },
+            children: []
+          }
+        ]
+      }
+    ]
+  })
+
   const {
     isOpen: isOpenSettings,
     onOpen: onOpenSettings,
@@ -14,31 +43,24 @@ function PlaygroundSidebar(): JSX.Element {
     onClose: onCloseSettings
   } = useDisclosure()
 
-  const data = flattenTree({
-    name: '',
-    children: [
-      {
-        name: 'Base de datos 1',
-        metadata: {
-          type: 'database'
-        },
-        children: [
-          { name: 'usuarios', metadata: { type: 'table' } },
-          { name: 'animales', metadata: { type: 'table' } }
-        ]
-      }
-    ]
-  })
+  const data = flattenTree(tree)
 
   return (
     <>
       <div className="flex justify-between h-full flex-col border-r dark:border-default-200">
         <div className="h-full">
           <TreeView
-            className="pt-3 pl-3"
+            className="pt-3 pl-3 pr-3"
             data={data}
-            nodeRenderer={({ element, getNodeProps, level }) => (
-              <PlaygroundSidebarItem element={element} getNodeProps={getNodeProps} level={level} />
+            nodeRenderer={({ element, getNodeProps, level, handleExpand }) => (
+              <PlaygroundSidebarItem
+                element={element}
+                getNodeProps={getNodeProps}
+                level={level}
+                tree={tree}
+                setTree={setTree}
+                handleExpand={handleExpand}
+              />
             )}
           />
         </div>
