@@ -8,7 +8,7 @@ import { JSX, useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 
 interface RouteSearch {
-  id: string
+  id?: string
 }
 
 export const Route = createFileRoute('/playground')({
