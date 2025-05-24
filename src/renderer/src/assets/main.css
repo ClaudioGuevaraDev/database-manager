@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.monaco-editor:focus-within {
-  outline: none !important;
-}
-
-.monaco-editor,
-.monaco-editor .margin,
-.monaco-editor .inputarea {
-  outline: none !important;
-}
-
-.monaco-editor .margin .line-numbers {
-  padding-left: 1rem;
-}
-
 .basic.tree {
   list-style: none;
   margin: 0;
