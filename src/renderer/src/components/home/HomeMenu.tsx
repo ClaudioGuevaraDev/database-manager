@@ -91,11 +91,13 @@ function HomeMenu({ isPlayground }: Props): JSX.Element {
           </Select>
         </div>
 
-        <div>
-          <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
-            <IoMdSettings className="w-5 h-5" />
-          </Button>
-        </div>
+        {!isPlayground && (
+          <div>
+            <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
+              <IoMdSettings className="w-5 h-5" />
+            </Button>
+          </div>
+        )}
       </div>
 
       <EngineDatabaseForm

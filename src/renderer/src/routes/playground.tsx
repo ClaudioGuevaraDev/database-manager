@@ -3,9 +3,10 @@ import SettingsModal from '@renderer/components/general/SettingsModal'
 import ConnectionList from '@renderer/components/home/ConnectionList'
 import HomeMenu from '@renderer/components/home/HomeMenu'
 import Playground from '@renderer/components/playground/Playground'
+import useHandleSelectedConnection from '@renderer/hooks/useHandleSelectedConnection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
-import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
-import { JSX, useEffect, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { JSX, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { IoMdSettings } from 'react-icons/io'
 import { VscCloseAll } from 'react-icons/vsc'
@@ -30,29 +31,15 @@ function RouteComponent(): JSX.Element {
 
   const { connections, handleConnections } = useConnectionsStore()
   const navigate = useNavigate()
-  const search = useSearch({ from: '/playground' })
   const {
     isOpen: isOpenSettings,
     onOpen: onOpenSettings,
     onOpenChange: onOpenChangeSettings,
     onClose: onCloseSettings
   } = useDisclosure()
+  useHandleSelectedConnection({ setSelectedConnection })
 
-  useEffect(() => {
-    const filterConnections = connections.filter((connection) => connection.active)
-
-    if (filterConnections.length === 0) {
-      return
-    }
-
-    const foundConnection = filterConnections.find((connection) => connection.id === search.id)
-
-    if (foundConnection != null) {
-      setSelectedConnection(search.id)
-    } else {
-      setSelectedConnection(filterConnections[0].id)
-    }
-  }, [connections, search])
+  const checkConnection = connections.find((connection) => connection.id === selectedConnection)
 
   const handleDesactiveConnection = (id: string): void => {
     const newConnections = connections.map((connection) =>
@@ -80,57 +67,69 @@ function RouteComponent(): JSX.Element {
 
   return (
     <>
-      <div className="h-full min-h-screen flex flex-col pt-2 px-2">
-        <div className="mb-2 flex items-center justify-start pl-1 gap-2">
-          <Button isIconOnly variant="bordered" onPress={closeAllTabs}>
-            <VscCloseAll className="w-6 h-6" />
-          </Button>
-          <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
-            <IoMdSettings className="w-5 h-5" />
-          </Button>
+      <div className="h-screen flex flex-col pt-2 pb-3 px-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Tabs
+            aria-label="connections"
+            variant="light"
+            size="lg"
+            color="primary"
+            selectedKey={selectedConnection}
+            onSelectionChange={setSelectedConnection}
+            className="flex-1"
+          >
+            {connections
+              .filter((connection) => connection.active)
+              .map((connection) => (
+                <Tab
+                  key={connection.id}
+                  title={
+                    <Chip
+                      className={`bg-transparent ${
+                        connection.id === selectedConnection
+                          ? 'text-white '
+                          : 'text-gray-900 dark:text-white'
+                      }`}
+                      onClose={() => handleDesactiveConnection(connection.id)}
+                    >
+                      {connection.name}
+                    </Chip>
+                  }
+                />
+              ))}
+
+            <Tab title={<FaPlus className="w-4 h-4" />} />
+          </Tabs>
+
+          <div className="flex items-center gap-2">
+            <Button isIconOnly variant="bordered" onPress={closeAllTabs}>
+              <VscCloseAll className="w-6 h-6" />
+            </Button>
+            <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
+              <IoMdSettings className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
-        <Tabs
-          aria-label="connections"
-          variant="light"
-          size="lg"
-          color="primary"
-          selectedKey={selectedConnection}
-          onSelectionChange={setSelectedConnection}
-        >
-          {connections
-            .filter((connection) => connection.active)
-            .map((connection) => (
-              <Tab
-                key={connection.id}
-                title={
-                  <Chip
-                    className={`bg-transparent ${connection.id === selectedConnection ? 'text-white ' : 'text-gray-900 dark:text-white'}`}
-                    onClose={() => handleDesactiveConnection(connection.id)}
-                  >
-                    {connection.name}
-                  </Chip>
-                }
-                className="flex-1 flex"
-              >
-                <Playground />
-              </Tab>
-            ))}
-
-          <Tab title={<FaPlus className="w-4 h-4" />}>
-            <div className="p-3 space-y-4">
-              <HomeMenu isPlayground={true} />
-              <ConnectionList isPlayground={true} />
+        <div className="flex-1 flex flex-col">
+          {checkConnection ? (
+            <Playground />
+          ) : (
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 p-3 space-y-4 flex flex-col">
+                <HomeMenu isPlayground={true} />
+                <ConnectionList isPlayground={true} />
+              </div>
             </div>
-          </Tab>
-        </Tabs>
-      </div>
+          )}
+        </div>
 
-      <SettingsModal
-        isOpen={isOpenSettings}
-        onOpenChange={onOpenChangeSettings}
-        onClose={onCloseSettings}
-      />
+        <SettingsModal
+          isOpen={isOpenSettings}
+          onOpenChange={onOpenChangeSettings}
+          onClose={onCloseSettings}
+        />
+      </div>
     </>
   )
 }
