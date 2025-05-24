@@ -12,6 +12,7 @@ function Playground(): JSX.Element {
         <div className="col-span-3 2xl:col-span-2">
           <PlaygroundSidebar />
         </div>
+
         <div className="col-span-9 2xl:col-span-10 flex-1 flex flex-col space-y-4 pt-3 pr-3">
           <PlaygroundEditor />
           <PlaygroundTable />
