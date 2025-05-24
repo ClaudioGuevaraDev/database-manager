@@ -11,7 +11,7 @@ import {
   SelectItem,
   Switch
 } from '@heroui/react'
-import useHandleBaseForm from '@renderer/hooks/useHandleBaseForm'
+import useHandleBaseForm from '@renderer/hooks/home/useHandleBaseForm'
 import { Connection, ConnectionForm, Engine, engines } from '@renderer/interfaces/connection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import MySQLSvg from '@renderer/svgs/MySQLSvg'

@@ -1,6 +1,5 @@
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import { useEffect } from 'react'
-import { toast } from 'sonner'
 
 function useGetConnections(): void {
   const { handleConnections, handleLoadingConnections } = useConnectionsStore()
@@ -9,12 +8,7 @@ function useGetConnections(): void {
     const connectionsStore = localStorage.getItem('connections')
 
     if (connectionsStore != null) {
-      try {
-        handleConnections(JSON.parse(connectionsStore))
-      } catch (error) {
-        console.error(error)
-        toast.error('Error al listar conexiones')
-      }
+      handleConnections(JSON.parse(connectionsStore))
     } else {
       handleConnections([])
     }

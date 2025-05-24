@@ -1,6 +1,6 @@
 import { HeroUIProvider } from '@heroui/react'
 import { useTheme } from '@heroui/use-theme'
-import useGetConnections from '@renderer/hooks/useGetConnections'
+import useGetConnections from '@renderer/hooks/general/useGetConnections'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { JSX } from 'react'
 import { Toaster } from 'sonner'

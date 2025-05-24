@@ -1,5 +1,6 @@
+import useFindTreeElement from '@renderer/hooks/playground/useFindTreeElement'
 import { Tree } from '@renderer/interfaces/playground'
-import { JSX, useEffect, useState } from 'react'
+import { JSX, useState } from 'react'
 import { EventCallback, IBranchProps, INode, LeafProps } from 'react-accessible-treeview'
 import { IFlatMetadata } from 'react-accessible-treeview/dist/TreeView/utils'
 import { FaDatabase, FaTableCells } from 'react-icons/fa6'
@@ -26,19 +27,7 @@ function PlaygroundSidebarItem({
 
   const elementID = (element.metadata ? element.metadata.id : undefined) as string | undefined
 
-  const findTreeElement = (node: Tree): void => {
-    if (node.metadata.id === elementID) {
-      setNode(node)
-      return
-    }
-
-    node.children.map((children) => findTreeElement(children))
-    return
-  }
-
-  useEffect(() => {
-    findTreeElement(tree)
-  }, [tree])
+  useFindTreeElement({ elementID, tree, setNode })
 
   const toggleActiveById = (tree: Tree, elementID: string): Tree => {
     const toggle = (node: Tree): Tree => {

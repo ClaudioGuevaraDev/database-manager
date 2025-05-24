@@ -1,5 +1,5 @@
 import { Button, Input, Select, SelectItem, useDisclosure } from '@heroui/react'
-import useInitialEngineForm from '@renderer/hooks/useInitialEngineForm'
+import useInitialEngineForm from '@renderer/hooks/home/useInitialEngineForm'
 import { Engine, engines } from '@renderer/interfaces/connection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import MySQLSvg from '@renderer/svgs/MySQLSvg'
