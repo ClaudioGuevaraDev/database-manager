@@ -75,27 +75,22 @@ function PlaygroundSidebarItem({
         }
       })}
       tabIndex={-1}
-      style={{ paddingLeft: 50 * (level - 1) }}
+      style={{ paddingLeft: 40 * (level - 1) }}
       className="flex items-center justify-between gap-2 mb-2 w-full hover:bg-default-200 py-2.5 rounded-xl cursor-pointer"
     >
-      <div className="flex items-center gap-2 pl-3">
-        {node &&
-          node.metadata.type === 'database' &&
+      <div className="flex items-center gap-2 overflow-hidden w-full px-1.5">
+        {node?.metadata?.type === 'database' &&
           (node.metadata.active ? (
-            <IoIosArrowDown className="w-5 h-5 mr-1" />
+            <IoIosArrowDown className="w-5 h-5 shrink-0" />
           ) : (
-            <IoIosArrowForward className="w-5 h-5 mr-1" />
+            <IoIosArrowForward className="w-5 h-5 shrink-0" />
           ))}
 
-        {element.metadata && element.metadata.type === 'database' && (
-          <FaDatabase className="w-4 h-4" />
-        )}
-        {element.metadata && element.metadata.type === 'table' && (
-          <FaTableCells className="w-4 h-4" />
-        )}
-        <span className="text-base font-normal max-w-40 truncate">{element.name}</span>
+        {element.metadata?.type === 'database' && <FaDatabase className="w-4 h-4 shrink-0" />}
+        {element.metadata?.type === 'table' && <FaTableCells className="w-4 h-4 shrink-0" />}
+
+        <span className="text-base font-normal truncate flex-1">{element.name}</span>
       </div>
-      <div className="pr-3 w-full"></div>
     </div>
   )
 }

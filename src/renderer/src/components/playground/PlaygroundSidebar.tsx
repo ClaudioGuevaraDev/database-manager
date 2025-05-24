@@ -50,7 +50,7 @@ function PlaygroundSidebar(): JSX.Element {
       <div className="flex justify-between h-full flex-col border-r dark:border-default-200">
         <div className="h-full">
           <TreeView
-            className="pt-3 pl-3 pr-3"
+            className="pt-3 px-1.5"
             data={data}
             nodeRenderer={({ element, getNodeProps, level, handleExpand }) => (
               <PlaygroundSidebarItem
