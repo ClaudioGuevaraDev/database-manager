@@ -65,7 +65,7 @@ function PlaygroundSidebarItem({
       })}
       tabIndex={-1}
       style={{ paddingLeft: 40 * (level - 1) }}
-      className="flex items-center justify-between gap-2 mb-2 w-full hover:bg-default-200 py-2.5 rounded-xl cursor-pointer"
+      className="flex items-center justify-between gap-2 mb-2 w-full hover:bg-default-200 py-2.5 rounded-xl cursor-pointer select-none"
     >
       <div className="flex items-center gap-2 overflow-hidden w-full px-1.5">
         {node?.metadata?.type === 'database' &&
