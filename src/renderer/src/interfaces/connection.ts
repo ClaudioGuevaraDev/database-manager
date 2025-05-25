@@ -14,6 +14,7 @@ export interface Connection {
   database: string
   ssl: boolean
   active: boolean
+  position: number
 }
 
 export interface ConnectionForm {

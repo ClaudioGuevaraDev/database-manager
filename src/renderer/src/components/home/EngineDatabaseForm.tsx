@@ -89,7 +89,8 @@ function EngineDatabaseForm({
       ...form,
       engine: selectedEngine,
       id: edit && connectionID ? connectionID : uuidv4(),
-      active: false
+      active: false,
+      position: 0
     }
 
     if (action === 'test') {

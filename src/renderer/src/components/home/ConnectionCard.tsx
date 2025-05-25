@@ -77,10 +77,11 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
     }
 
     const parsedConnections = JSON.parse(connectionsStore) as Connection[]
+    const position = parsedConnections.filter((connection) => connection.active).length + 1
 
     const newConnections = parsedConnections.map((parsedConnection) =>
       parsedConnection.id === connection.id
-        ? { ...parsedConnection, active: true }
+        ? { ...parsedConnection, active: true, position: position }
         : parsedConnection
     )
 

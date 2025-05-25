@@ -11,7 +11,9 @@ function useHandleSelectedConnection({ setSelectedConnection }: Props): void {
   const search = useSearch({ from: '/playground' })
 
   useEffect(() => {
-    const filterConnections = connections.filter((connection) => connection.active)
+    const filterConnections = connections
+      .filter((connection) => connection.active)
+      .sort((a, b) => a.position - b.position)
 
     if (filterConnections.length === 0) {
       return

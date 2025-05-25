@@ -57,7 +57,11 @@ function RouteComponent(): JSX.Element {
   }
 
   const closeAllTabs = (): void => {
-    const newConnections = connections.map((connection) => ({ ...connection, active: false }))
+    const newConnections = connections.map((connection) => ({
+      ...connection,
+      active: false,
+      position: 0
+    }))
 
     localStorage.setItem('connections', JSON.stringify(newConnections))
     handleConnections(newConnections)
@@ -80,6 +84,7 @@ function RouteComponent(): JSX.Element {
           >
             {connections
               .filter((connection) => connection.active)
+              .sort((a, b) => a.position - b.position)
               .map((connection) => (
                 <Tab
                   key={connection.id}
