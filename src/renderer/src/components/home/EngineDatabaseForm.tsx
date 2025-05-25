@@ -64,10 +64,10 @@ function EngineDatabaseForm({
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
 
+  useHandleBaseForm({ baseForm: baseForm, edit: edit, setForm: setForm })
+
   const { connections, handleConnections } = useConnectionsStore()
   const { t } = useTranslation()
-
-  useHandleBaseForm({ baseForm: baseForm, edit: edit, setForm: setForm })
 
   const selectedEngine = Array.from(form.engine)[0] as Engine
 

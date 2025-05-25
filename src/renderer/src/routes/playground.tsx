@@ -29,15 +29,17 @@ function RouteComponent(): JSX.Element {
     undefined
   )
 
-  const { connections, handleConnections } = useConnectionsStore()
+  useHandleSelectedConnection({ setSelectedConnection })
+
   const navigate = useNavigate()
+
+  const { connections, handleConnections } = useConnectionsStore()
   const {
     isOpen: isOpenSettings,
     onOpen: onOpenSettings,
     onOpenChange: onOpenChangeSettings,
     onClose: onCloseSettings
   } = useDisclosure()
-  useHandleSelectedConnection({ setSelectedConnection })
 
   const checkConnection = connections.find((connection) => connection.id === selectedConnection)
 
@@ -67,6 +69,18 @@ function RouteComponent(): JSX.Element {
     handleConnections(newConnections)
 
     navigate({ to: '/' })
+  }
+
+  const filterConnections = connections
+    .filter((connection) => connection.active)
+    .sort((a, b) => a.position - b.position)
+
+  if (
+    selectedConnection == null ||
+    (typeof selectedConnection === 'string' &&
+      selectedConnection.startsWith(`$.${filterConnections.length + 1}`))
+  ) {
+    return <></>
   }
 
   return (

@@ -76,7 +76,15 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
     }
 
     const parsedConnections = JSON.parse(connectionsStore) as Connection[]
-    const position = parsedConnections.filter((connection) => connection.active).length + 1
+
+    const sortedConnections = parsedConnections
+      .filter((connection) => connection.active)
+      .sort((a, b) => a.position - b.position)
+
+    let position = 1
+    if (sortedConnections.length > 0) {
+      position = sortedConnections[sortedConnections.length - 1].position + 1
+    }
 
     const newConnections = parsedConnections.map((parsedConnection) =>
       parsedConnection.id === connection.id
