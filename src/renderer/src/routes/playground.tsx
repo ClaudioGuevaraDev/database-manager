@@ -145,7 +145,7 @@ function RouteComponent(): JSX.Element {
 
         <div className="flex flex-1 flex-col">
           {checkConnection ? (
-            <Playground />
+            <Playground selectedConnection={selectedConnection} />
           ) : (
             <div className="flex flex-1 flex-col">
               <div className="flex flex-1 flex-col space-y-4 p-3">

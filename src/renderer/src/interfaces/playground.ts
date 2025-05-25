@@ -7,3 +7,8 @@ export interface Tree {
   }
   children: Tree[]
 }
+
+export interface DatabasesWithInfo {
+  name: string
+  tables: string[]
+}

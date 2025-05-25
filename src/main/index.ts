@@ -3,7 +3,7 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { join } from 'path'
 
 import icon from '../../resources/icon.png?asset'
-import { checkConnectionDatabaseEvent } from './events'
+import { checkConnectionDatabaseEvent, listDatabasesWithInfo } from './events'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -36,6 +36,7 @@ function createWindow(): void {
   }
 
   ipcMain.handle('check_database_connection', checkConnectionDatabaseEvent)
+  ipcMain.handle('list_databases_with_info', listDatabasesWithInfo)
 }
 
 app.whenReady().then(() => {

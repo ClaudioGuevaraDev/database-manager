@@ -12,3 +12,8 @@ export interface Connection {
   database: string
   ssl: boolean
 }
+
+export interface DatabasesWithInfo {
+  name: string
+  tables: string[]
+}

@@ -1,4 +1,6 @@
-import mysql from 'mysql2/promise'
+import mysql, { RowDataPacket } from 'mysql2/promise'
+
+import { DatabasesWithInfo } from '../interfaces'
 
 export class MySQL {
   host: string
@@ -33,6 +35,48 @@ export class MySQL {
       database: this.db,
       ssl: this.ssl ? { rejectUnauthorized: true } : undefined
     })
-    await conn.query('SELECT NOW()')
+
+    try {
+      await conn.query('SELECT NOW()')
+    } finally {
+      await conn.end()
+    }
+  }
+
+  async listDatabasesWithInfo(): Promise<DatabasesWithInfo[]> {
+    const conn = await mysql.createConnection({
+      host: this.host,
+      port: this.port,
+      user: this.username,
+      password: this.password,
+      database: this.db,
+      ssl: this.ssl ? { rejectUnauthorized: true } : undefined
+    })
+
+    const [databasesRaw] = await conn.query('SHOW DATABASES')
+    const databases = databasesRaw as RowDataPacket[]
+
+    const result: DatabasesWithInfo[] = []
+
+    for (const db of databases) {
+      const { Database } = db as { Database: string }
+
+      try {
+        await conn.changeUser({ database: Database })
+
+        const [tablesRaw] = await conn.query('SHOW TABLES')
+        const tablesData = tablesRaw as RowDataPacket[]
+
+        const tableNames = tablesData.map((row) => Object.values(row)[0] as string)
+
+        result.push({ name: Database, tables: tableNames })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    await conn.end()
+
+    return result
   }
 }

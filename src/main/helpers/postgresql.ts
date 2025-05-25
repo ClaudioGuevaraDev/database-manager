@@ -1,5 +1,7 @@
 import { Client } from 'pg'
 
+import { DatabasesWithInfo } from '../interfaces'
+
 export class PostgreSQL {
   host: string
   port: string
@@ -35,7 +37,15 @@ export class PostgreSQL {
   }
 
   async checkConnection(): Promise<void> {
-    await this.client.connect()
-    await this.client.query('SELECT NOW()')
+    try {
+      await this.client.connect()
+      await this.client.query('SELECT NOW()')
+    } finally {
+      await this.client.end()
+    }
+  }
+
+  async listDatabasesWithInfo(): Promise<DatabasesWithInfo[]> {
+    return []
   }
 }

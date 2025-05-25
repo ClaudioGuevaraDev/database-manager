@@ -1,14 +1,47 @@
 import { Card, CardBody } from '@heroui/react'
+import { Connection } from '@renderer/interfaces/connection'
+import { DatabasesWithInfo } from '@renderer/interfaces/playground'
 import { useSettingsStore } from '@renderer/store/settingsStore'
 import clsx from 'clsx'
-import { JSX } from 'react'
+import { JSX, useEffect } from 'react'
 
 import PlaygroundEditor from './PlaygroundEditor'
 import PlaygroundSidebar from './PlaygroundSidebar'
 import PlaygroundTable from './PlaygroundTable'
 
-function Playground(): JSX.Element {
+interface Props {
+  selectedConnection: string | number | undefined
+}
+
+function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
+
+  const listEngineInfo = async (): Promise<void> => {
+    const connections = localStorage.getItem('connections')
+
+    if (connections == null) {
+      return
+    }
+
+    const parsedConnections = JSON.parse(connections) as Connection[]
+
+    const connection = parsedConnections.find((connection) => connection.id === selectedConnection)
+
+    if (connection == null) {
+      return
+    }
+
+    const databases = (await window.electron.ipcRenderer.invoke(
+      'list_databases_with_info',
+      connection
+    )) as DatabasesWithInfo[]
+
+    console.log(databases)
+  }
+
+  useEffect(() => {
+    listEngineInfo()
+  }, [selectedConnection])
 
   return (
     <Card className="flex-1">
