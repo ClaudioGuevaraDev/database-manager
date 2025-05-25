@@ -26,6 +26,9 @@ importers:
       '@tanstack/react-router':
         specifier: 1.120.3
         version: 1.120.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
       electron-updater:
         specifier: 6.3.9
         version: 6.3.9

@@ -5,6 +5,7 @@ import HomeMenu from '@renderer/components/home/HomeMenu'
 import Playground from '@renderer/components/playground/Playground'
 import useHandleSelectedConnection from '@renderer/hooks/playground/useHandleSelectedConnection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
+import { useSettingsStore } from '@renderer/store/settingsStore'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { JSX, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
@@ -41,6 +42,7 @@ function RouteComponent(): JSX.Element {
     onOpenChange: onOpenChangeSettings,
     onClose: onCloseSettings
   } = useDisclosure()
+  const { showSidebar, handleShowSidebar } = useSettingsStore()
 
   const checkConnection = connections.find((connection) => connection.id === selectedConnection)
 
@@ -88,12 +90,13 @@ function RouteComponent(): JSX.Element {
     <>
       <div className="h-screen flex flex-col pt-2 pb-3 px-3">
         <div className="flex items-center gap-2 mb-2">
-          <div>
-            <Button isIconOnly variant="bordered">
-              <GoSidebarCollapse className="w-6 h-6" />
-            </Button>
-            <Button isIconOnly variant="bordered">
-              <GoSidebarExpand className="w-6 h-6" />
+          <div className="-mr-1">
+            <Button isIconOnly variant="bordered" onPress={() => handleShowSidebar(!showSidebar)}>
+              {showSidebar ? (
+                <GoSidebarExpand className="w-6 h-6" />
+              ) : (
+                <GoSidebarCollapse className="w-6 h-6" />
+              )}
             </Button>
           </div>
 

@@ -27,6 +27,7 @@
     "@heroui/toast": "2.0.9",
     "@heroui/use-theme": "2.1.8",
     "@tanstack/react-router": "1.120.3",
+    "clsx": "2.1.1",
     "electron-updater": "6.3.9",
     "framer-motion": "12.11.4",
     "i18next": "25.1.3",
