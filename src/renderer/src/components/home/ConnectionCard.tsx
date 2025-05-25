@@ -130,7 +130,7 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
         <CardFooter className="flex justify-between gap-2">
           <Button
             color="primary"
-            startContent={<TbDatabaseImport className="w-6 h-6" />}
+            startContent={<TbDatabaseImport className="h-6 w-6" />}
             onPress={handleRedirectPlayground}
           >
             {t('home.list.connect')}
@@ -138,7 +138,7 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
           {!isPlayground && (
             <Button
               color="warning"
-              startContent={<TbDatabaseEdit className="w-6 h-6" />}
+              startContent={<TbDatabaseEdit className="h-6 w-6" />}
               onPress={onOpenEngineDatabaseForm}
             >
               {t('home.list.edit')}
@@ -147,7 +147,7 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
           {!isPlayground && (
             <Button
               color="danger"
-              startContent={<TbDatabaseX className="w-6 h-6" />}
+              startContent={<TbDatabaseX className="h-6 w-6" />}
               onPress={onOpenDeleteConnection}
             >
               {t('home.list.delete')}
@@ -167,14 +167,14 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
           <ModalFooter>
             <Button
               color="danger"
-              startContent={<TbDatabaseX className="w-5 h-5" />}
+              startContent={<TbDatabaseX className="h-5 w-5" />}
               onPress={handleDeleteConnection}
             >
               {t('home.list.delete')}
             </Button>
             <Button
               onPress={onCloseDeleteConnection}
-              startContent={<IoExitOutline className="w-5 h-5" />}
+              startContent={<IoExitOutline className="h-5 w-5" />}
             >
               {t('home.list.close')}
             </Button>

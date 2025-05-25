@@ -88,14 +88,14 @@ function RouteComponent(): JSX.Element {
 
   return (
     <>
-      <div className="h-screen flex flex-col pt-2 pb-3 px-3">
-        <div className="flex items-center gap-2 mb-2">
+      <div className="flex h-screen flex-col px-3 pb-3 pt-2">
+        <div className="mb-2 flex items-center gap-2">
           <div className="-mr-1">
             <Button isIconOnly variant="bordered" onPress={() => handleShowSidebar(!showSidebar)}>
               {showSidebar ? (
-                <GoSidebarExpand className="w-6 h-6" />
+                <GoSidebarExpand className="h-6 w-6" />
               ) : (
-                <GoSidebarCollapse className="w-6 h-6" />
+                <GoSidebarCollapse className="h-6 w-6" />
               )}
             </Button>
           </div>
@@ -119,7 +119,7 @@ function RouteComponent(): JSX.Element {
                     <Chip
                       className={`bg-transparent ${
                         connection.id === selectedConnection
-                          ? 'text-white '
+                          ? 'text-white'
                           : 'text-gray-900 dark:text-white'
                       }`}
                       onClose={() => handleDesactiveConnection(connection.id)}
@@ -130,25 +130,25 @@ function RouteComponent(): JSX.Element {
                 />
               ))}
 
-            <Tab title={<FaPlus className="w-4 h-4" />} />
+            <Tab title={<FaPlus className="h-4 w-4" />} />
           </Tabs>
 
           <div className="flex items-center gap-2">
             <Button isIconOnly variant="bordered" onPress={closeAllTabs}>
-              <VscCloseAll className="w-6 h-6" />
+              <VscCloseAll className="h-6 w-6" />
             </Button>
             <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
-              <IoMdSettings className="w-5 h-5" />
+              <IoMdSettings className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col">
+        <div className="flex flex-1 flex-col">
           {checkConnection ? (
             <Playground />
           ) : (
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 p-3 space-y-4 flex flex-col">
+            <div className="flex flex-1 flex-col">
+              <div className="flex flex-1 flex-col space-y-4 p-3">
                 <HomeMenu isPlayground={true} />
                 <ConnectionList isPlayground={true} />
               </div>

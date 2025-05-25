@@ -50,14 +50,14 @@ function HomeMenu({ isPlayground }: Props): JSX.Element {
 
   return (
     <>
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {!isPlayground && (
             <Button
               color="primary"
               size="md"
               className="w-full max-w-40"
-              startContent={<TbDatabasePlus className="w-5 h-5" />}
+              startContent={<TbDatabasePlus className="h-5 w-5" />}
               onPress={onOpenEngineDatabaseForm}
             >
               {t('home.menu.add_connection')}
@@ -68,7 +68,7 @@ function HomeMenu({ isPlayground }: Props): JSX.Element {
             placeholder={t('home.menu.search_connection')}
             size="md"
             className="w-72"
-            startContent={<IoSearch className="w-5 h-5" />}
+            startContent={<IoSearch className="h-5 w-5" />}
             value={searchConnection}
             onValueChange={handleSearchConnection}
           />
@@ -91,7 +91,7 @@ function HomeMenu({ isPlayground }: Props): JSX.Element {
         {!isPlayground && (
           <div>
             <Button isIconOnly variant="bordered" onPress={onOpenSettings}>
-              <IoMdSettings className="w-5 h-5" />
+              <IoMdSettings className="h-5 w-5" />
             </Button>
           </div>
         )}

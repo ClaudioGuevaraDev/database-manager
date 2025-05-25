@@ -12,16 +12,16 @@ function Playground(): JSX.Element {
 
   return (
     <Card className="flex-1">
-      <CardBody className="grid grid-cols-12 p-0 gap-4">
+      <CardBody className="grid grid-cols-12 gap-4 p-0">
         {showSidebar && (
-          <div className="overflow-hidden col-span-3 2xl:col-span-2 opacity-100">
+          <div className="col-span-3 overflow-hidden opacity-100 2xl:col-span-2">
             <PlaygroundSidebar />
           </div>
         )}
 
         <div
           className={clsx(
-            'flex-1 flex flex-col space-y-4 pt-3 pr-3',
+            'flex flex-1 flex-col space-y-4 pr-3 pt-3',
             showSidebar ? 'col-span-9 2xl:col-span-10' : 'col-span-12 pl-3'
           )}
         >

@@ -36,10 +36,10 @@ function PlaygroundSidebar(): JSX.Element {
   const data = flattenTree(tree)
 
   return (
-    <div className="flex justify-between h-full flex-col border-r border-gray-200 dark:border-default-100">
+    <div className="flex h-full flex-col justify-between border-r border-gray-200 dark:border-default-100">
       <div className="h-full">
         <TreeView
-          className="pt-3 px-1.5"
+          className="px-1.5 pt-3"
           data={data}
           nodeRenderer={({ element, getNodeProps, level, handleExpand }) => (
             <PlaygroundSidebarItem

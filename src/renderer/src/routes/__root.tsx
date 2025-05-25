@@ -14,7 +14,7 @@ function Root(): JSX.Element {
   return (
     <>
       <HeroUIProvider>
-        <main className="text-foreground bg-background w-full h-full min-h-screen">
+        <main className="h-full min-h-screen w-full bg-background text-foreground">
           <Outlet />
           <ToastProvider placement="bottom-right" toastProps={{ timeout: 3000 }} />
         </main>

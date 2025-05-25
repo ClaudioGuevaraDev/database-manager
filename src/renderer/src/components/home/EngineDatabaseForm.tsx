@@ -251,12 +251,12 @@ function EngineDatabaseForm({
                 endContent={
                   showPort ? (
                     <HiMiniEyeSlash
-                      className="w-6 h-6 cursor-default"
+                      className="h-6 w-6 cursor-default"
                       onClick={() => setShowPort(false)}
                     />
                   ) : (
                     <BsEyeFill
-                      className="w-6 h-6 cursor-default"
+                      className="h-6 w-6 cursor-default"
                       onClick={() => setShowPort(true)}
                     />
                   )
@@ -275,7 +275,7 @@ function EngineDatabaseForm({
             <Button
               color="primary"
               type="submit"
-              startContent={<FaSave className="w-5 h-5" />}
+              startContent={<FaSave className="h-5 w-5" />}
               onPress={() => setAction('save')}
               isLoading={saving}
             >
@@ -284,7 +284,7 @@ function EngineDatabaseForm({
             <Button
               color="success"
               type="submit"
-              startContent={<BsDatabaseCheck className="w-5 h-5" />}
+              startContent={<BsDatabaseCheck className="h-5 w-5" />}
               onPress={() => setAction('test')}
               isLoading={testing}
             >
@@ -296,7 +296,7 @@ function EngineDatabaseForm({
                   setForm(edit && baseForm ? baseForm : initialConnectionForm)
                   onClose()
                 }}
-                startContent={<IoExitOutline className="w-5 h-5" />}
+                startContent={<IoExitOutline className="h-5 w-5" />}
               >
                 {t('home.menu.close')}
               </Button>

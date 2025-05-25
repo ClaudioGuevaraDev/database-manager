@@ -39,7 +39,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
         <Divider className="mb-2" />
         <ModalBody className="space-y-2">
           <div className="space-y-2">
-            <p className="font-medium text-base">{t('settings.language')}</p>
+            <p className="text-base font-medium">{t('settings.language')}</p>
             <Select
               aria-label="language"
               className="max-w-44"
@@ -55,7 +55,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
           </div>
 
           <div className="space-y-2">
-            <p className="font-medium text-base">{t('settings.dark_mode')}</p>
+            <p className="text-base font-medium">{t('settings.dark_mode')}</p>
             <Switch
               size="lg"
               color="secondary"
@@ -73,7 +73,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button onPress={onClose} startContent={<IoExitOutline className="w-5 h-5" />}>
+          <Button onPress={onClose} startContent={<IoExitOutline className="h-5 w-5" />}>
             {t('settings.close')}
           </Button>
         </ModalFooter>

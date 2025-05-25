@@ -25,7 +25,7 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent(): JSX.Element {
   return (
-    <div className="p-4 space-y-4">
+    <div className="space-y-4 p-4">
       <HomeMenu isPlayground={false} />
 
       <ConnectionList isPlayground={false} />
