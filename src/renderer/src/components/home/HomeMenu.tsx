@@ -21,16 +21,13 @@ interface Props {
 function HomeMenu({ isPlayground }: Props): JSX.Element {
   const { searchConnection, selectedEngines, handleSearchConnection, handleSelectedEngines } =
     useConnectionsStore()
-
   const { t } = useTranslation()
-
   const {
     isOpen: isOpenEngineDatabaseForm,
     onOpen: onOpenEngineDatabaseForm,
     onOpenChange: onOpenChangeEngineDatabaseForm,
     onClose: onCloseEngineDatabaseForm
   } = useDisclosure()
-
   const {
     isOpen: isOpenSettings,
     onOpen: onOpenSettings,

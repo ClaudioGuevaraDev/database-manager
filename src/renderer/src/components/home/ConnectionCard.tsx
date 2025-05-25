@@ -30,17 +30,16 @@ interface Props {
 }
 
 function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
-  const { handleConnections } = useConnectionsStore()
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const { handleConnections } = useConnectionsStore()
+  const { t } = useTranslation()
   const {
     isOpen: isOpenDeleteConnection,
     onOpen: onOpenDeleteConnection,
     onOpenChange: onOpenChangeDeleteConnection,
     onClose: onCloseDeleteConnection
   } = useDisclosure()
-
   const {
     isOpen: isOpenEngineDatabaseForm,
     onOpen: onOpenEngineDatabaseForm,

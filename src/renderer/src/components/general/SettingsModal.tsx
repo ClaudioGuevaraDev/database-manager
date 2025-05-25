@@ -12,6 +12,7 @@ import {
   Switch
 } from '@heroui/react'
 import { useTheme } from '@heroui/use-theme'
+import { useSettingsStore } from '@renderer/store/settingsStore'
 import { JSX, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaMoon } from 'react-icons/fa'
@@ -27,6 +28,7 @@ interface Props {
 function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
   const { theme, setTheme } = useTheme()
   const { t, i18n } = useTranslation()
+  const { handleMode } = useSettingsStore()
 
   const [language, setLanguage] = useState<Selection>(new Set([i18n.language]))
 
@@ -63,8 +65,10 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
               onValueChange={() => {
                 if (theme === 'dark') {
                   setTheme('light')
+                  handleMode('light')
                 } else {
                   setTheme('dark')
+                  handleMode('dark')
                 }
               }}
             />
