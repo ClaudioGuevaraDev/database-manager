@@ -2,19 +2,19 @@ import { Selection } from '@heroui/react'
 import { create } from 'zustand'
 
 interface SettingsState {
-  mode: string
   language: Selection
-  handleMode: (value: string) => void
+  showSidebar: boolean
   handleLanguage: (value: Selection) => void
+  handleShowSidebar: (value: boolean) => void
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
-  mode: '',
   language: new Set([]),
-  handleMode(value): void {
-    set({ mode: value })
-  },
+  showSidebar: true,
   handleLanguage(value): void {
     set({ language: value })
+  },
+  handleShowSidebar(value): void {
+    set({ showSidebar: value })
   }
 }))

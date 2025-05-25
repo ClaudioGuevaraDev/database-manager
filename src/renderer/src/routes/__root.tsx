@@ -1,7 +1,6 @@
 import { HeroUIProvider } from '@heroui/react'
 import { ToastProvider } from '@heroui/toast'
 import useGetConnections from '@renderer/hooks/general/useGetConnections'
-import useHandleInitialMode from '@renderer/hooks/general/useHandleInitialMode'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { JSX } from 'react'
 
@@ -11,7 +10,6 @@ export const Route = createRootRoute({
 
 function Root(): JSX.Element {
   useGetConnections()
-  useHandleInitialMode()
 
   return (
     <>

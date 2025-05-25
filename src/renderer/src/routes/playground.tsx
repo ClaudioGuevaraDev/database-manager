@@ -8,6 +8,7 @@ import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { JSX, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
+import { GoSidebarCollapse, GoSidebarExpand } from 'react-icons/go'
 import { IoMdSettings } from 'react-icons/io'
 import { VscCloseAll } from 'react-icons/vsc'
 
@@ -87,6 +88,15 @@ function RouteComponent(): JSX.Element {
     <>
       <div className="h-screen flex flex-col pt-2 pb-3 px-3">
         <div className="flex items-center gap-2 mb-2">
+          <div>
+            <Button isIconOnly variant="bordered">
+              <GoSidebarCollapse className="w-6 h-6" />
+            </Button>
+            <Button isIconOnly variant="bordered">
+              <GoSidebarExpand className="w-6 h-6" />
+            </Button>
+          </div>
+
           <Tabs
             aria-label="connections"
             variant="light"

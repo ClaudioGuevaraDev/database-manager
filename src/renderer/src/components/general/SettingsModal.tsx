@@ -30,7 +30,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
 
   const { theme, setTheme } = useTheme()
   const { t, i18n } = useTranslation()
-  const { handleMode, language, handleLanguage } = useSettingsStore()
+  const { language, handleLanguage } = useSettingsStore()
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}>
@@ -65,10 +65,8 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
               onValueChange={() => {
                 if (theme === 'dark') {
                   setTheme('light')
-                  handleMode('light')
                 } else {
                   setTheme('dark')
-                  handleMode('dark')
                 }
               }}
             />
