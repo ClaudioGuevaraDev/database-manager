@@ -7,13 +7,13 @@ import {
   ModalFooter,
   ModalHeader,
   Select,
-  Selection,
   SelectItem,
   Switch
 } from '@heroui/react'
 import { useTheme } from '@heroui/use-theme'
+import useHandleInitialLanguage from '@renderer/hooks/general/useHandleInitialLanguage'
 import { useSettingsStore } from '@renderer/store/settingsStore'
-import { JSX, useState } from 'react'
+import { JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaMoon } from 'react-icons/fa'
 import { IoMdSunny } from 'react-icons/io'
@@ -26,11 +26,11 @@ interface Props {
 }
 
 function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
+  useHandleInitialLanguage()
+
   const { theme, setTheme } = useTheme()
   const { t, i18n } = useTranslation()
-  const { handleMode } = useSettingsStore()
-
-  const [language, setLanguage] = useState<Selection>(new Set([i18n.language]))
+  const { handleMode, language, handleLanguage } = useSettingsStore()
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}>
@@ -45,7 +45,7 @@ function SettingsModal({ isOpen, onOpenChange, onClose }: Props): JSX.Element {
               className="max-w-44"
               selectedKeys={language}
               onSelectionChange={(value) => {
-                setLanguage(value)
+                handleLanguage(value)
                 i18n.changeLanguage(value as string)
               }}
             >
