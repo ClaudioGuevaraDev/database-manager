@@ -17,7 +17,9 @@
       "test": "Test",
       "close": "Close",
       "connection_error": "Can't connect to server",
-      "successful_connection": "Successful connection"
+      "successful_connection": "Successful connection",
+      "save_connection_error": "Error saving connection",
+      "error_start_application": "Unexpected error when starting application"
     },
     "list": {
       "without_connections": "No connections",
@@ -30,7 +32,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "delete_connection": "Delete connection",
-      "close": "Close"
+      "close": "Close",
+      "connection_delete_error": "Error deleting connection"
     }
   },
   "settings": {

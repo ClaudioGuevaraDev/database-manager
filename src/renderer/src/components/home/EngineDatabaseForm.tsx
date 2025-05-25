@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Divider,
   Input,
@@ -23,7 +24,6 @@ import { BsEyeFill } from 'react-icons/bs'
 import { FaSave } from 'react-icons/fa'
 import { HiMiniEyeSlash } from 'react-icons/hi2'
 import { IoExitOutline } from 'react-icons/io5'
-import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
 const initialConnectionForm: ConnectionForm = {
@@ -106,10 +106,10 @@ function EngineDatabaseForm({
           throw new Error()
         }
 
-        toast.success(t('home.menu.successful_connection'))
+        addToast({ title: t('home.menu.successful_connection'), color: 'success' })
       } catch (error) {
         console.error(error)
-        toast.error(t('home.menu.connection_error'))
+        addToast({ title: t('home.menu.connection_error'), color: 'danger' })
       }
 
       setTesting(false)
@@ -141,7 +141,7 @@ function EngineDatabaseForm({
       } catch (error) {
         console.error(error)
         setSaving(false)
-        toast.error(t('home.menu.connection_error'))
+        addToast({ title: t('home.menu.connection_error'), color: 'danger' })
         return
       }
 
@@ -161,13 +161,13 @@ function EngineDatabaseForm({
         setForm(initialConnectionForm)
 
         setSaving(false)
-        toast.success(t('home.menu.successful_connection'))
+        addToast({ title: t('home.menu.successful_connection'), color: 'success' })
 
         onClose()
       } catch (error) {
         console.error(error)
         setSaving(false)
-        toast.error('Error al guardar la conexión')
+        addToast({ title: t('home.menu.save_connection_error'), color: 'danger' })
       }
     }
   }

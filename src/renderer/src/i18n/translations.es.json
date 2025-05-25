@@ -17,7 +17,9 @@
       "test": "Probar",
       "close": "Cerrar",
       "connection_error": "No se puede conectar al servidor",
-      "successful_connection": "Conexión exitosa"
+      "successful_connection": "Conexión exitosa",
+      "save_connection_error": "Error al guardar la conexión",
+      "error_start_application": "Error inesperado al iniciar aplicación"
     },
     "list": {
       "without_connections": "Sin conexiones",
@@ -30,7 +32,8 @@
       "edit": "Editar",
       "delete": "Eliminar",
       "delete_connection": "Eliminar conexión",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "connection_delete_error": "Error al eliminar la conexión"
     }
   },
   "settings": {

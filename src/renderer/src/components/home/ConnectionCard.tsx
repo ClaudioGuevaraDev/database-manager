@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -20,7 +21,6 @@ import { JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoExitOutline } from 'react-icons/io5'
 import { TbDatabaseEdit, TbDatabaseImport, TbDatabaseX } from 'react-icons/tb'
-import { toast } from 'sonner'
 
 import EngineDatabaseForm from './EngineDatabaseForm'
 
@@ -64,7 +64,7 @@ function ConnectionCard({ connection, isPlayground }: Props): JSX.Element {
       handleConnections(filterConnections)
     } catch (error) {
       console.error(error)
-      toast.error('Error al eliminar conexión')
+      addToast({ title: t('home.list.connection_delete_error'), color: 'danger' })
     }
   }
 

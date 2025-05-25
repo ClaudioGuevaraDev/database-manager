@@ -24,6 +24,7 @@
     "@electron-toolkit/preload": "3.0.1",
     "@electron-toolkit/utils": "4.0.0",
     "@heroui/react": "2.7.8",
+    "@heroui/toast": "2.0.9",
     "@heroui/use-theme": "2.1.8",
     "@tanstack/react-router": "1.120.3",
     "electron-updater": "6.3.9",
@@ -36,7 +37,6 @@
     "react-accessible-treeview": "2.11.1",
     "react-i18next": "15.5.1",
     "react-icons": "5.5.0",
-    "sonner": "2.0.3",
     "uuid": "11.1.0",
     "zustand": "5.0.4"
   },

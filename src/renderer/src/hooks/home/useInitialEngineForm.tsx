@@ -1,7 +1,8 @@
+import { addToast } from '@heroui/toast'
 import { Connection } from '@renderer/interfaces/connection'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import { useEffect } from 'react'
-import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   onOpenChangeEngineDatabaseForm: () => void
@@ -9,6 +10,7 @@ interface Props {
 
 function useInitialEngineForm({ onOpenChangeEngineDatabaseForm }: Props): void {
   const { connections, loadingConnections } = useConnectionsStore()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (loadingConnections) {
@@ -31,7 +33,10 @@ function useInitialEngineForm({ onOpenChangeEngineDatabaseForm }: Props): void {
       }
     } catch (error) {
       console.error(error)
-      toast.error('Error inesperado al iniciar aplicación')
+      addToast({
+        title: t('home.menu.error_start_application'),
+        color: 'danger'
+      })
     }
   }, [connections, loadingConnections])
 
