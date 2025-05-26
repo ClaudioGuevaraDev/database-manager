@@ -58,21 +58,23 @@ export class MySQL {
 
     const result: DatabasesWithInfo[] = []
 
+    const ignoredDb = ['information_schema', 'performance_schema', 'mysql', 'sys']
+
     for (const db of databases) {
       const { Database } = db as { Database: string }
 
-      try {
-        await conn.changeUser({ database: Database })
-
-        const [tablesRaw] = await conn.query('SHOW TABLES')
-        const tablesData = tablesRaw as RowDataPacket[]
-
-        const tableNames = tablesData.map((row) => Object.values(row)[0] as string)
-
-        result.push({ name: Database, tables: tableNames })
-      } catch (error) {
-        console.error(error)
+      if (ignoredDb.includes(Database)) {
+        continue
       }
+
+      await conn.changeUser({ database: Database })
+
+      const [tablesRaw] = await conn.query('SHOW TABLES')
+      const tablesData = tablesRaw as RowDataPacket[]
+
+      const tableNames = tablesData.map((row) => Object.values(row)[0] as string)
+
+      result.push({ name: Database, tables: tableNames })
     }
 
     await conn.end()

@@ -46,6 +46,37 @@ export class PostgreSQL {
   }
 
   async listDatabasesWithInfo(): Promise<DatabasesWithInfo[]> {
-    return []
+    await this.client.connect()
+
+    const databaseRes = await this.client.query(
+      'SELECT datname FROM pg_database WHERE datistemplate = false'
+    )
+
+    const databases = databaseRes.rows.map((row) => row.datname as string)
+
+    const result: DatabasesWithInfo[] = []
+
+    for (const db of databases) {
+      const dbClient = new Client({
+        host: this.host,
+        port: Number(this.port),
+        user: this.username,
+        password: this.password,
+        database: db,
+        ssl: this.ssl
+      })
+
+      await dbClient.connect()
+
+      const tableRes = await dbClient.query(
+        `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'`
+      )
+
+      const tables = tableRes.rows.map((row) => row.table_name as string)
+
+      result.push({ name: db, tables: tables })
+    }
+
+    return result
   }
 }
