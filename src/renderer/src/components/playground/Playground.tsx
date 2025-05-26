@@ -16,7 +16,7 @@ interface Props {
 function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
 
-  const listEngineInfo = async (): Promise<void> => {
+  const listDatabasesWithInfo = async (): Promise<void> => {
     const connections = localStorage.getItem('connections')
 
     if (connections == null) {
@@ -40,7 +40,7 @@ function Playground({ selectedConnection }: Props): JSX.Element {
   }
 
   useEffect(() => {
-    listEngineInfo()
+    listDatabasesWithInfo()
   }, [selectedConnection])
 
   return (
