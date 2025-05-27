@@ -1,6 +1,8 @@
+import { addToast } from '@heroui/toast'
 import { Connection } from '@renderer/interfaces/connection'
 import { DatabasesWithInfo, Tree } from '@renderer/interfaces/playground'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 
 interface Props {
@@ -16,6 +18,8 @@ function useListDatabasesWithInfo({ selectedConnection }: Props): {
     metadata: { id: uuidv4(), active: false, type: '' },
     children: []
   })
+
+  const { t } = useTranslation()
 
   const parserDatabasesWithInfoToTree = (databases: DatabasesWithInfo[]): Tree => {
     const children: Tree[] = []
@@ -70,13 +74,30 @@ function useListDatabasesWithInfo({ selectedConnection }: Props): {
       return
     }
 
-    const databases = (await window.electron.ipcRenderer.invoke(
-      'list_databases_with_info',
-      connection
-    )) as DatabasesWithInfo[]
+    try {
+      const databases = (await window.electron.ipcRenderer.invoke(
+        'list_databases_with_info',
+        connection
+      )) as DatabasesWithInfo[] | boolean
 
-    const tree = parserDatabasesWithInfoToTree(databases)
-    setDatabasesTree(tree)
+      if (typeof databases === 'boolean') {
+        addToast({
+          title: t('home.menu.connection_error'),
+          color: 'danger'
+        })
+
+        return
+      }
+
+      const tree = parserDatabasesWithInfoToTree(databases)
+      setDatabasesTree(tree)
+    } catch (error) {
+      console.error(error)
+      addToast({
+        title: t('home.menu.connection_error'),
+        color: 'danger'
+      })
+    }
   }
 
   useEffect(() => {

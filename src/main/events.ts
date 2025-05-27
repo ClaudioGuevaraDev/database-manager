@@ -38,7 +38,7 @@ export const checkConnectionDatabaseEvent = async (
 export const listDatabasesWithInfo = async (
   _: IpcMainInvokeEvent,
   connection: Connection
-): Promise<DatabasesWithInfo[]> => {
+): Promise<DatabasesWithInfo[] | boolean> => {
   const { database, engine, host, password, port, ssl, username } = connection
 
   const mysql = new MySQL(host, port, username, password, database, ssl)
@@ -51,7 +51,7 @@ export const listDatabasesWithInfo = async (
         return databases
       } catch (error) {
         console.error(error)
-        return []
+        return false
       }
     case 'PostgreSQL':
       try {
@@ -59,7 +59,7 @@ export const listDatabasesWithInfo = async (
         return databases
       } catch (error) {
         console.error(error)
-        return []
+        return false
       }
     default:
       return []

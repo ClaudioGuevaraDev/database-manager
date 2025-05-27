@@ -16,7 +16,7 @@
       "save": "Guardar",
       "test": "Probar",
       "close": "Cerrar",
-      "connection_error": "No se puede conectar al servidor",
+      "connection_error": "Error al conectar con el servidor",
       "successful_connection": "Conexión exitosa",
       "save_connection_error": "Error al guardar la conexión",
       "error_start_application": "Error inesperado al iniciar aplicación"

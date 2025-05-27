@@ -16,7 +16,7 @@
       "save": "Save",
       "test": "Test",
       "close": "Close",
-      "connection_error": "Can't connect to server",
+      "connection_error": "Error connecting to the server",
       "successful_connection": "Successful connection",
       "save_connection_error": "Error saving connection",
       "error_start_application": "Unexpected error when starting application"
