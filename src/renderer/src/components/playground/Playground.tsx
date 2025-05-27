@@ -21,7 +21,7 @@ function Playground({ selectedConnection }: Props): JSX.Element {
     <Card className="flex-1">
       <CardBody className="grid grid-cols-12 gap-4 p-0">
         {showSidebar && (
-          <div className="col-span-3 overflow-y-auto opacity-100 2xl:col-span-2">
+          <div className="col-span-3 overflow-y-auto opacity-100 2xl:col-span-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-default-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-default-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
             <PlaygroundSidebar tree={databasesTree} setTree={setDatabasesTree} />
           </div>
         )}
