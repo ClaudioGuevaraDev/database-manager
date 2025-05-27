@@ -143,7 +143,7 @@ function RouteComponent(): JSX.Element {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col" style={{ height: 'calc(100vh - 90px)' }}>
           {checkConnection ? (
             <Playground selectedConnection={selectedConnection} />
           ) : (

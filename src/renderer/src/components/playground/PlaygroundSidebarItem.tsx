@@ -67,7 +67,7 @@ function PlaygroundSidebarItem({
       style={{ paddingLeft: 40 * (level - 1) }}
       className="mb-2 flex w-full cursor-pointer select-none items-center justify-between gap-2 rounded-xl py-2.5 hover:bg-default-200"
     >
-      <div className="flex w-full items-center gap-2 overflow-hidden px-1.5">
+      <div className="flex w-full items-center gap-2 px-1.5">
         {node?.metadata?.type === 'database' &&
           (node.metadata.active ? (
             <IoIosArrowDown className="h-5 w-5 shrink-0" />

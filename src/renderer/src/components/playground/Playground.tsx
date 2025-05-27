@@ -1,9 +1,8 @@
 import { Card, CardBody } from '@heroui/react'
-import { Connection } from '@renderer/interfaces/connection'
-import { DatabasesWithInfo } from '@renderer/interfaces/playground'
+import useListDatabasesWithInfo from '@renderer/hooks/playground/useListDatabasesWithInfo'
 import { useSettingsStore } from '@renderer/store/settingsStore'
 import clsx from 'clsx'
-import { JSX, useEffect } from 'react'
+import { JSX } from 'react'
 
 import PlaygroundEditor from './PlaygroundEditor'
 import PlaygroundSidebar from './PlaygroundSidebar'
@@ -16,39 +15,14 @@ interface Props {
 function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
 
-  const listDatabasesWithInfo = async (): Promise<void> => {
-    const connections = localStorage.getItem('connections')
-
-    if (connections == null) {
-      return
-    }
-
-    const parsedConnections = JSON.parse(connections) as Connection[]
-
-    const connection = parsedConnections.find((connection) => connection.id === selectedConnection)
-
-    if (connection == null) {
-      return
-    }
-
-    const databases = (await window.electron.ipcRenderer.invoke(
-      'list_databases_with_info',
-      connection
-    )) as DatabasesWithInfo[]
-
-    console.log(databases)
-  }
-
-  useEffect(() => {
-    listDatabasesWithInfo()
-  }, [selectedConnection])
+  const { databasesTree, setDatabasesTree } = useListDatabasesWithInfo({ selectedConnection })
 
   return (
     <Card className="flex-1">
       <CardBody className="grid grid-cols-12 gap-4 p-0">
         {showSidebar && (
-          <div className="col-span-3 overflow-hidden opacity-100 2xl:col-span-2">
-            <PlaygroundSidebar />
+          <div className="col-span-3 overflow-y-auto opacity-100 2xl:col-span-2">
+            <PlaygroundSidebar tree={databasesTree} setTree={setDatabasesTree} />
           </div>
         )}
 
