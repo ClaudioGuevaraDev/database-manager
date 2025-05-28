@@ -25,10 +25,14 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent(): JSX.Element {
   return (
-    <div className="space-y-4 p-4">
-      <HomeMenu isPlayground={false} />
+    <div className="flex h-screen flex-col">
+      <div className="shrink-0 border-b border-gray-200 p-4 dark:border-default-100">
+        <HomeMenu isPlayground={false} />
+      </div>
 
-      <ConnectionList isPlayground={false} />
+      <div className="grow space-y-4 overflow-y-auto p-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-default-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-default-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
+        <ConnectionList isPlayground={false} />
+      </div>
     </div>
   )
 }
