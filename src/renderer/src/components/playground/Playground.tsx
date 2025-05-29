@@ -31,6 +31,7 @@ function Playground({ selectedConnection }: Props): JSX.Element {
             'flex flex-1 flex-col space-y-4 pr-3 pt-3',
             showSidebar ? 'col-span-9 2xl:col-span-10' : 'col-span-12 pl-3'
           )}
+          style={{ height: 'calc(100vh - 90px)' }}
         >
           <PlaygroundEditor />
           <PlaygroundTable />
