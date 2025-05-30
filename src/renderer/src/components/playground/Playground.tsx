@@ -1,6 +1,6 @@
 import { Card, CardBody } from '@heroui/react'
-import useListDatabasesWithInfo from '@renderer/hooks/playground/useListDatabasesWithInfo'
 import { useSettingsStore } from '@renderer/store/settingsStore'
+import { useDatabasesTreeStore } from '@renderer/store/useDatabasesTreeStore'
 import clsx from 'clsx'
 import { JSX } from 'react'
 
@@ -14,15 +14,18 @@ interface Props {
 
 function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
+  const { databasesTree } = useDatabasesTreeStore()
 
-  const { databasesTree, setDatabasesTree } = useListDatabasesWithInfo({ selectedConnection })
+  const tree = databasesTree.find(
+    (databaseTree) => databaseTree.connectionID === selectedConnection
+  )?.tree
 
   return (
     <Card className="flex-1">
       <CardBody className="grid grid-cols-12 gap-4 p-0">
         {showSidebar && (
           <div className="col-span-3 overflow-y-auto opacity-100 2xl:col-span-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-default-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-default-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
-            <PlaygroundSidebar tree={databasesTree} setTree={setDatabasesTree} />
+            {tree && <PlaygroundSidebar tree={tree} selectedConnection={selectedConnection} />}
           </div>
         )}
 

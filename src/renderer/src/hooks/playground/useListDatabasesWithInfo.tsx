@@ -1,23 +1,13 @@
 import { addToast } from '@heroui/toast'
 import { Connection } from '@renderer/interfaces/connection'
-import { DatabasesWithInfo, Tree } from '@renderer/interfaces/playground'
-import { useEffect, useState } from 'react'
+import { DatabasesWithInfo, DatabaseTree, Tree } from '@renderer/interfaces/playground'
+import { useDatabasesTreeStore } from '@renderer/store/useDatabasesTreeStore'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 
-interface Props {
-  selectedConnection: string | number | undefined
-}
-
-function useListDatabasesWithInfo({ selectedConnection }: Props): {
-  databasesTree: Tree
-  setDatabasesTree: (value: Tree) => void
-} {
-  const [databasesTree, setDatabasesTree] = useState<Tree>({
-    name: '',
-    metadata: { id: uuidv4(), active: false, type: '' },
-    children: []
-  })
+function useListDatabasesWithInfo(): void {
+  const { handleDatabasesTree } = useDatabasesTreeStore()
 
   const { t } = useTranslation()
 
@@ -59,21 +49,9 @@ function useListDatabasesWithInfo({ selectedConnection }: Props): {
     return tree
   }
 
-  const listDatabasesWithInfo = async (): Promise<void> => {
-    const connections = localStorage.getItem('connections')
-
-    if (connections == null) {
-      return
-    }
-
-    const parsedConnections = JSON.parse(connections) as Connection[]
-
-    const connection = parsedConnections.find((connection) => connection.id === selectedConnection)
-
-    if (connection == null) {
-      return
-    }
-
+  const listDatabasesWithInfo = async (
+    connection: Connection
+  ): Promise<DatabaseTree | undefined> => {
     try {
       const databases = (await window.electron.ipcRenderer.invoke(
         'list_databases_with_info',
@@ -86,25 +64,57 @@ function useListDatabasesWithInfo({ selectedConnection }: Props): {
           color: 'danger'
         })
 
-        return
+        return undefined
       }
 
       const tree = parserDatabasesWithInfoToTree(databases)
-      setDatabasesTree(tree)
+
+      return {
+        connectionID: connection.id,
+        databases: databases,
+        tree: tree
+      }
+
+      // handleDatabasesTree([...databasesTree, newDatabaseTree])
     } catch (error) {
       console.error(error)
       addToast({
         title: t('home.menu.connection_error'),
         color: 'danger'
       })
+
+      return undefined
     }
   }
 
-  useEffect(() => {
-    listDatabasesWithInfo()
-  }, [selectedConnection])
+  const loadDatabasesTree = async (): Promise<void> => {
+    const connections = localStorage.getItem('connections')
 
-  return { databasesTree: databasesTree, setDatabasesTree: setDatabasesTree }
+    if (connections == null) {
+      return
+    }
+
+    const parsedConnections = JSON.parse(connections) as Connection[]
+
+    const filterConnections = parsedConnections.filter((connection) => connection.active)
+
+    const databasesTree: DatabaseTree[] = []
+    for (const connection of filterConnections) {
+      const databaseTree = await listDatabasesWithInfo(connection)
+
+      if (databaseTree) {
+        databasesTree.push(databaseTree)
+      }
+    }
+
+    handleDatabasesTree(databasesTree)
+  }
+
+  useEffect(() => {
+    loadDatabasesTree()
+  }, [])
+
+  return
 }
 
 export default useListDatabasesWithInfo

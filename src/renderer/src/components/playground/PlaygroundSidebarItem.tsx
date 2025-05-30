@@ -1,6 +1,6 @@
-import useFindTreeElement from '@renderer/hooks/playground/useFindTreeElement'
 import { Tree } from '@renderer/interfaces/playground'
-import { JSX, useState } from 'react'
+import { useDatabasesTreeStore } from '@renderer/store/useDatabasesTreeStore'
+import { JSX } from 'react'
 import { EventCallback, IBranchProps, INode, LeafProps } from 'react-accessible-treeview'
 import { IFlatMetadata } from 'react-accessible-treeview/dist/TreeView/utils'
 import { FaDatabase, FaTableCells } from 'react-icons/fa6'
@@ -11,8 +11,8 @@ interface Props {
   getNodeProps: (args?: { onClick?: EventCallback }) => IBranchProps | LeafProps
   level: number
   tree: Tree
-  setTree: (value: Tree) => void
   handleExpand: EventCallback
+  selectedConnection: string | number | undefined
 }
 
 function PlaygroundSidebarItem({
@@ -20,14 +20,12 @@ function PlaygroundSidebarItem({
   getNodeProps,
   level,
   tree,
-  setTree,
-  handleExpand
+  handleExpand,
+  selectedConnection
 }: Props): JSX.Element {
-  const [node, setNode] = useState<Tree | undefined>(undefined)
-
   const elementID = (element.metadata ? element.metadata.id : undefined) as string | undefined
 
-  useFindTreeElement({ elementID, tree, setNode })
+  const { databasesTree, handleDatabasesTree } = useDatabasesTreeStore()
 
   const toggleActiveById = (tree: Tree, elementID: string): Tree => {
     const toggle = (node: Tree): Tree => {
@@ -52,7 +50,19 @@ function PlaygroundSidebarItem({
     }
 
     const updatedTree = toggleActiveById(tree, elementID)
-    setTree(updatedTree)
+
+    const newDatabasesTree = databasesTree.map((databaseTree) => {
+      if (databaseTree.connectionID === selectedConnection) {
+        return {
+          ...databaseTree,
+          tree: updatedTree
+        }
+      } else {
+        return databaseTree
+      }
+    })
+
+    handleDatabasesTree(newDatabasesTree)
   }
 
   return (
@@ -68,8 +78,9 @@ function PlaygroundSidebarItem({
       className="mb-2 flex w-full cursor-pointer select-none items-center justify-between gap-2 rounded-xl py-2.5 hover:bg-default-200"
     >
       <div className="flex w-full items-center gap-2 px-1.5">
-        {node?.metadata?.type === 'database' &&
-          (node.metadata.active ? (
+        {element.metadata &&
+          element.metadata.type === 'database' &&
+          (element.metadata.active ? (
             <IoIosArrowDown className="h-5 w-5 shrink-0" />
           ) : (
             <IoIosArrowForward className="h-5 w-5 shrink-0" />

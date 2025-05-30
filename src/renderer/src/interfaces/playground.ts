@@ -12,3 +12,9 @@ export interface DatabasesWithInfo {
   name: string
   tables: string[]
 }
+
+export interface DatabaseTree {
+  connectionID: string
+  databases: DatabasesWithInfo[]
+  tree: Tree
+}

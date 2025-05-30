@@ -4,6 +4,7 @@ import ConnectionList from '@renderer/components/home/ConnectionList'
 import HomeMenu from '@renderer/components/home/HomeMenu'
 import Playground from '@renderer/components/playground/Playground'
 import useHandleSelectedConnection from '@renderer/hooks/playground/useHandleSelectedConnection'
+import useListDatabasesWithInfo from '@renderer/hooks/playground/useListDatabasesWithInfo'
 import { useConnectionsStore } from '@renderer/store/connectionsStore'
 import { useSettingsStore } from '@renderer/store/settingsStore'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -32,6 +33,7 @@ function RouteComponent(): JSX.Element {
   )
 
   useHandleSelectedConnection({ setSelectedConnection })
+  useListDatabasesWithInfo()
 
   const navigate = useNavigate()
 

@@ -6,10 +6,10 @@ import PlaygroundSidebarItem from './PlaygroundSidebarItem'
 
 interface Props {
   tree: Tree
-  setTree: (value: Tree) => void
+  selectedConnection: string | number | undefined
 }
 
-function PlaygroundSidebar({ tree, setTree }: Props): JSX.Element {
+function PlaygroundSidebar({ tree, selectedConnection }: Props): JSX.Element {
   const data = flattenTree(tree)
 
   return (
@@ -24,8 +24,8 @@ function PlaygroundSidebar({ tree, setTree }: Props): JSX.Element {
               getNodeProps={getNodeProps}
               level={level}
               tree={tree}
-              setTree={setTree}
               handleExpand={handleExpand}
+              selectedConnection={selectedConnection}
             />
           )}
         />
