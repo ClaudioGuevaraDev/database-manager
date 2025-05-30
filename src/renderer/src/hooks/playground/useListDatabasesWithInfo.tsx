@@ -96,7 +96,9 @@ function useListDatabasesWithInfo(): void {
 
     const parsedConnections = JSON.parse(connections) as Connection[]
 
-    const filterConnections = parsedConnections.filter((connection) => connection.active)
+    const filterConnections = parsedConnections
+      .filter((connection) => connection.active)
+      .sort((a, b) => a.position - b.position)
 
     const databasesTree: DatabaseTree[] = []
     for (const connection of filterConnections) {
