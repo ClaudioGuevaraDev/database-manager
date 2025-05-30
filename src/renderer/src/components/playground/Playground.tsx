@@ -16,11 +16,18 @@ function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
   const { databasesTree } = useDatabasesTreeStore()
 
-  console.log(databasesTree)
-
-  const tree = databasesTree.find(
+  const connection = databasesTree.find(
     (databaseTree) => databaseTree.connectionID === selectedConnection
-  )?.tree
+  )
+
+  const tree = connection?.tree
+
+  const activedTree = tree?.children.find((chilren) =>
+    chilren.children.find((chilren) => chilren.metadata.active)
+  )
+
+  const database = activedTree?.name
+  const table = activedTree?.children.find((children) => children.metadata.active)?.name
 
   return (
     <Card className="flex-1">
@@ -39,7 +46,11 @@ function Playground({ selectedConnection }: Props): JSX.Element {
           style={{ height: 'calc(100vh - 90px)' }}
         >
           <PlaygroundEditor />
-          <PlaygroundTable />
+          <PlaygroundTable
+            selectedConnection={selectedConnection}
+            database={database}
+            table={table}
+          />
         </div>
       </CardBody>
     </Card>
