@@ -16,6 +16,8 @@ function Playground({ selectedConnection }: Props): JSX.Element {
   const { showSidebar } = useSettingsStore()
   const { databasesTree } = useDatabasesTreeStore()
 
+  console.log(databasesTree)
+
   const tree = databasesTree.find(
     (databaseTree) => databaseTree.connectionID === selectedConnection
   )?.tree

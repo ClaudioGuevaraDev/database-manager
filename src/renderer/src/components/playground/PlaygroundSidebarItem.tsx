@@ -1,5 +1,6 @@
 import { Tree } from '@renderer/interfaces/playground'
 import { useDatabasesTreeStore } from '@renderer/store/useDatabasesTreeStore'
+import clsx from 'clsx'
 import { JSX } from 'react'
 import { EventCallback, IBranchProps, INode, LeafProps } from 'react-accessible-treeview'
 import { IFlatMetadata } from 'react-accessible-treeview/dist/TreeView/utils'
@@ -27,15 +28,33 @@ function PlaygroundSidebarItem({
 
   const { databasesTree, handleDatabasesTree } = useDatabasesTreeStore()
 
-  const toggleActiveById = (tree: Tree, elementID: string): Tree => {
+  const toggleActiveById = (tree: Tree, elementID: string, isDatabase: boolean): Tree => {
     const toggle = (node: Tree): Tree => {
       const isMatch = node.metadata.id === elementID
+
+      let active = node.metadata.active
+
+      if (node.metadata.type === 'database') {
+        if (isMatch) {
+          active = !node.metadata.active
+        } else {
+          active = node.metadata.active
+        }
+      } else if (node.metadata.type === 'table') {
+        if (!isDatabase) {
+          if (isMatch) {
+            active = true
+          } else {
+            active = false
+          }
+        }
+      }
 
       return {
         ...node,
         metadata: {
           ...node.metadata,
-          active: isMatch ? !node.metadata.active : node.metadata.active
+          active: active
         },
         children: node.children.map(toggle)
       }
@@ -44,12 +63,12 @@ function PlaygroundSidebarItem({
     return toggle(tree)
   }
 
-  const handleActiveNode = (): void => {
+  const handleActiveNode = (isDatabase: boolean): void => {
     if (elementID == null) {
       return
     }
 
-    const updatedTree = toggleActiveById(tree, elementID)
+    const updatedTree = toggleActiveById(tree, elementID, isDatabase)
 
     const newDatabasesTree = databasesTree.map((databaseTree) => {
       if (databaseTree.connectionID === selectedConnection) {
@@ -70,12 +89,18 @@ function PlaygroundSidebarItem({
       {...getNodeProps({
         onClick: (event) => {
           handleExpand(event)
-          handleActiveNode()
+          handleActiveNode(element.metadata && element.metadata.type === 'database' ? true : false)
         }
       })}
       tabIndex={-1}
       style={{ paddingLeft: 40 * (level - 1) }}
-      className="mb-2 flex w-full cursor-pointer select-none items-center justify-between gap-2 rounded-xl py-2.5 hover:bg-default-200"
+      className={clsx(
+        'mb-2 flex w-full cursor-pointer select-none items-center justify-between gap-2 rounded-xl py-2.5 hover:bg-default-200',
+        element.metadata &&
+          element.metadata.type === 'table' &&
+          element.metadata.active &&
+          'bg-default-200'
+      )}
     >
       <div className="flex w-full items-center gap-2 px-1.5">
         {element.metadata &&
