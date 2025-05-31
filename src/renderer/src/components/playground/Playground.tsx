@@ -22,12 +22,12 @@ function Playground({ selectedConnection }: Props): JSX.Element {
 
   const tree = connection?.tree
 
-  const activedTree = tree?.children.find((chilren) =>
+  const activedTable = tree?.children.find((chilren) =>
     chilren.children.find((chilren) => chilren.metadata.active)
   )
 
-  const database = activedTree?.name
-  const table = activedTree?.children.find((children) => children.metadata.active)?.name
+  const database = activedTable?.name
+  const table = activedTable?.children.find((children) => children.metadata.active)?.name
 
   return (
     <Card className="flex-1">

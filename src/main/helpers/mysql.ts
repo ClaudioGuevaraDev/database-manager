@@ -53,31 +53,33 @@ export class MySQL {
       ssl: this.ssl ? { rejectUnauthorized: true } : undefined
     })
 
-    const [databasesRaw] = await conn.query('SHOW DATABASES')
-    const databases = databasesRaw as RowDataPacket[]
-
     const result: DatabasesWithInfo[] = []
 
-    const ignoredDb = ['information_schema', 'performance_schema', 'mysql', 'sys']
+    try {
+      const [databasesRaw] = await conn.query('SHOW DATABASES')
+      const databases = databasesRaw as RowDataPacket[]
 
-    for (const db of databases) {
-      const { Database } = db as { Database: string }
+      const ignoredDb = ['information_schema', 'performance_schema', 'mysql', 'sys']
 
-      if (ignoredDb.includes(Database)) {
-        continue
+      for (const db of databases) {
+        const { Database } = db as { Database: string }
+
+        if (ignoredDb.includes(Database)) {
+          continue
+        }
+
+        await conn.changeUser({ database: Database })
+
+        const [tablesRaw] = await conn.query('SHOW TABLES')
+        const tablesData = tablesRaw as RowDataPacket[]
+
+        const tableNames = tablesData.map((row) => Object.values(row)[0] as string)
+
+        result.push({ name: Database, tables: tableNames })
       }
-
-      await conn.changeUser({ database: Database })
-
-      const [tablesRaw] = await conn.query('SHOW TABLES')
-      const tablesData = tablesRaw as RowDataPacket[]
-
-      const tableNames = tablesData.map((row) => Object.values(row)[0] as string)
-
-      result.push({ name: Database, tables: tableNames })
+    } finally {
+      await conn.end()
     }
-
-    await conn.end()
 
     return result
   }

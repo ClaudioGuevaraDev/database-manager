@@ -74,8 +74,6 @@ function useListDatabasesWithInfo(): void {
         databases: databases,
         tree: tree
       }
-
-      // handleDatabasesTree([...databasesTree, newDatabaseTree])
     } catch (error) {
       console.error(error)
       addToast({
